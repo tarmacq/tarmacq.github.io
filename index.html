@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarmacq's Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌐%3C/text%3E%3C/svg%3E" />
+
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            background-color: #f0f2f5; /* Light background */
+            color: #333; /* Dark text for contrast */
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; /* Hide scrollbar if content fits */
+            position: relative;
+
+            /* Airplane background */
+            background-image: url('https://via.placeholder.com/1920x1080/E0E0E0/333333?text=Your+Airplane+Image+Here'); /* REPLACE WITH YOUR AIRPLANE IMAGE URL */
+            background-size: cover; /* Cover the entire background */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Do not repeat the image */
+            background-attachment: fixed; /* Keep image fixed when scrolling (if content overflows) */
+
+            /* Optional: Overlay to make text more readable if image is busy */
+            /* Add a semi-transparent overlay */
+            /* &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(255, 255, 255, 0.4); /* White overlay, 40% opaque */
+                /* z-index: 1;
+            } */
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            z-index: 20; /* Ensure it's above the background and any overlay */
+            margin-bottom: 50px; /* Space between main profile and "Now Playing" */
+            background-color: rgba(255, 255, 255, 0.85); /* Slightly transparent white background for readability */
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px); /* Frosty glass effect */
+        }
+
+        /* Profile Icon Styling - adjusted for lighter theme */
+        .profile-icon {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #007bff, #00c6ff); /* Blue gradient, similar to your image */
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.5); /* More visible border on light background */
+            box-shadow: 0 0 15px rgba(0, 198, 255, 0.5), 0 0 30px rgba(0, 123, 255, 0.3); /* Glowing effect */
+        }
+
+        .profile-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .username {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1a1a1a; /* Darker color for username */
+            letter-spacing: 1px;
+        }
+
+        .description {
+            font-size: 1.1em;
+            color: #555; /* Darker gray for description */
+            margin-bottom: 30px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-links a {
+            color: #333; /* Darker icons for contrast */
+            font-size: 1.8em;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        .social-links a:hover {
+            color: #007bff; /* Highlight color on hover */
+            transform: translateY(-3px);
+        }
+
+        /* Now Playing Box Styling - adjusted for lighter theme */
+        .now-playing-box {
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+            border-radius: 10px;
+            padding: 15px;
+            width: 280px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-size: 0.9em;
+            transition: all 0.3s ease-in-out;
+            margin-top: 30px;
+            position: relative;
+            z-index: 20;
+            backdrop-filter: blur(5px);
+        }
+
+        .now-playing-box .np-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #555; /* Darker text */
+        }
+
+        .now-playing-box .np-close-btn {
+            background: none;
+            border: none;
+            color: #555;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 0 5px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .now-playing-box .np-content {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .now-playing-box .album-art {
+            width: 60px;
+            height: 60px;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .now-playing-box .song-info {
+            flex-grow: 1;
+        }
+
+        .now-playing-box .song-title {
+            font-weight: bold;
+            color: #1a1a1a; /* Darker color */
+            font-size: 1.1em;
+        }
+
+        .now-playing-box .artist {
+            color: #555; /* Darker color */
+            font-size: 0.9em;
+        }
+
+        .now-playing-box .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background-color: #ccc; /* Lighter background for progress bar */
+            border-radius: 2px;
+            margin-bottom: 8px;
+        }
+
+        .now-playing-box .progress-bar {
+            height: 100%;
+            background-color: #007bff; /* Progress color */
+            border-radius: 2px;
+        }
+
+        .now-playing-box .time-controls {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .now-playing-box .volume-control {
+            margin-bottom: 15px;
+        }
+
+        .now-playing-box .volume-control span {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .now-playing-box .volume-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 5px;
+            background: #ccc; /* Lighter slider track */
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+            border-radius: 2.5px;
+        }
+
+        .now-playing-box .volume-slider:hover {
+            opacity: 1;
+        }
+
+        .now-playing-box .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: #007bff; /* Thumb color */
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .now-playing-box .volume-slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            background: #007bff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .now-playing-box .playback-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .now-playing-box .playback-controls button {
+            background: none;
+            border: none;
+            color: #333; /* Darker icons */
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            padding: 5px;
+        }
+
+        .now-playing-box .playback-controls button:hover {
+            color: #007bff;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .username {
+                font-size: 2em;
+            }
+
+            .description {
+                font-size: 1em;
+                margin-bottom: 25px;
+            }
+
+            .social-links a {
+                font-size: 1.5em;
+                gap: 15px;
+            }
+
+            .now-playing-box {
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .username {
+                font-size: 1.8em;
+            }
+
+            .description {
+                font-size: 0.9em;
+                margin-bottom: 20px;
+            }
+
+            .social-links {
+                gap: 10px;
+            }
+
+            .social-links a {
+                font-size: 1.3em;
+            }
+
+            .now-playing-box {
+                padding: 10px;
+            }
+
+            .now-playing-box .album-art {
+                width: 40px;
+                height: 40px;
+                margin-right: 10px;
+            }
+            .now-playing-box .song-title {
+                font-size: 1em;
+            }
+            .now-playing-box .artist {
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-icon">
+            <img src="https://via.placeholder.com/150/0000FF/FFFFFF?text=🌐" alt="Profile Icon">
+        </div>
+
+        <h1 class="username">@.tarmacq</h1>
+        <p class="description">HS Dev, Weightlifting, Aviation</p>
+
+        <div class="social-links">
+            <a href="https://instagram.com/tarmacq" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://spotify.com/yourprofile" target="_blank" aria-label="Spotify"><i class="fab fa-spotify"></i></a>
+            <a href="https://github.com/yourprofile" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://discord.gg/yourinvite" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
+            <a href="https://yourwebsite.com" target="_blank" aria-label="Website"><i class="fas fa-link"></i></a>
+        </div>
+    </div>
+
+    <div class="now-playing-box">
+        <div class="np-header">
+            <span>Now Playing</span>
+            <button class="np-close-btn" onclick="this.closest('.now-playing-box').style.display='none';">×</button>
+        </div>
+        <div class="np-content">
+            <img src="https://via.placeholder.com/50/FFC0CB/000000?text=🎶" alt="Album Art" class="album-art">
+            <div class="song-info">
+                <div class="song-title">Jealous</div>
+                <div class="artist">Eyedress</div>
+            </div>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 50%;"></div> </div>
+        <div class="time-controls">
+            <span class="current-time">0:23</span>
+            <span class="total-time">2:02</span>
+        </div>
+        <div class="volume-control">
+            <span>Volume Control</span>
+            <input type="range" min="0" max="100" value="70" class="volume-slider">
+        </div>
+        <div class="playback-controls">
+            <button><i class="fas fa-backward"></i></button>
+            <button><i class="fas fa-pause"></i></button>
+            <button><i class="fas fa-forward"></i></button>
+        </div>
+    </div>
+
+</body>
+</html>
