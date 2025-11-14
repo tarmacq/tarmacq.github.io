@@ -4,31 +4,114 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:title" content="tarmacq">
-  <meta property="og:description" content="Hi, I'm tarmacq.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://tarmacq.github.io">
-  <meta property="og:image" content="https://ik.imagekit.io/hswtnwf8i/Untitled%20(33).png?updatedAt=1761329593382">
-  <meta property="og:site_name" content="tarmacq">
+    <meta property="og:description" content="Hi, I'm tarmacq.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.tarmacq.com">
+    <meta property="og:image" content="https://ik.imagekit.io/hswtnwf8i/Untitled%20(37).png?updatedAt=1763118080646">
+    <meta property="og:site_name" content="tarmacq">
     <title>tarmacq</title>
+    
+    <!-- Core Tools: Tailwind CSS and Inter Font -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="https://ik.imagekit.io/hswtnwf8i/Untitled%20(33).png?updatedAt=1761329593382" type="image/png" />
+    <link rel="icon" href="https://ik.imagekit.io/hswtnwf8i/Untitled%20(37).png?updatedAt=1763118080646" type="image/png" />
+    
+    <!-- External Libraries Loaded Globally -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <!-- RGBELoader is often attached to the THREE namespace after loading -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    
+    <!-- --- INLINE CSS STYLES --- -->
     <style>
+        /* --- Liquid Gradient Background --- */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a;
+            background: linear-gradient(120deg, #0a0a0a, #4f46e5, #ec4899, #1a1a2e);
+            background-size: 400% 400%;
+            animation: liquid-gradient 20s ease infinite;
             color: #e0e0e0;
             overflow-x: hidden;
         }
-        .text-accent {
-            color: #4f46e5;
+
+        @keyframes liquid-gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        .bg-card {
-            background-color: #1a1a2e;
-            border: 1px solid rgba(79, 70, 229, 0.2);
+
+        /* --- Glassmorphism Card Style --- */
+        .glass-card {
+            background: rgba(26, 26, 46, 0.4);
+            backdrop-filter: blur(12px) saturate(150%);
+            -webkit-backdrop-filter: blur(12px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
+
+        .glass-card:hover {
+            box-shadow: 0 0 25px rgba(79, 70, 229, 0.5);
+            transform: translateY(-5px);
+        }
+
+        /* --- Header Glassmorphism --- */
+        header.sticky {
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* --- Simple Static Image Loader --- */
+        #loader { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: radial-gradient(circle, #1e1e2f, #0a0a0a); 
+            display: flex; justify-content: center; align-items: center; 
+            z-index: 1000; transition: opacity 0.8s ease-out; 
+        }
+        /* Loader Circle styling remains, now housing the image */
+        .loader {
+            width: 120px; /* Slightly larger container */
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background: #4f46e5;
+            box-shadow: 0 0 40px rgba(79, 70, 229, 0.7);
+        }
+        .loader img {
+            border-radius: 50%;
+            object-fit: cover;
+            /* Ensures the image itself is centered and fits nicely */
+        }
+
+
+        /* --- 3D Skill Card Tilt Effect --- */
+        .skill-card-tilt {
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
+        .skill-card-tilt:hover {
+            box-shadow: 0 0 30px rgba(79, 70, 229, 0.7);
+        }
+        
+        /* --- 3D Hero Canvas --- */
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            opacity: 0.8;
+        }
+
+        /* Utility Styles */
+        .text-accent { color: #6366f1; }
         .section-heading {
             position: relative;
             display: inline-block;
@@ -36,7 +119,7 @@
             margin-bottom: 50px;
             font-size: 2.5rem;
             letter-spacing: 1px;
-            background: linear-gradient(90deg, #4f46e5, #ec4899);
+            background: linear-gradient(90deg, #818cf8, #f472b6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -48,40 +131,11 @@
             transform: translateX(-50%);
             width: 80px;
             height: 4px;
-            background: linear-gradient(90deg, #4f46e5, #ec4899);
+            background: linear-gradient(90deg, #818cf8, #f472b6);
             border-radius: 9999px;
-            box-shadow: 0 0 10px rgba(79, 70, 229, 0.5);
+            box-shadow: 0 0 10px rgba(129, 140, 248, 0.5);
         }
-        .animate-fade-in {
-            animation: fadeIn 1.5s ease-in-out;
-        }
-        .animate-slide-up {
-            animation: slideUp 1s ease-out;
-        }
-        .animate-slide-up-delay {
-            animation: slideUp 1s ease-out 0.4s forwards;
-            opacity: 0;
-        }
-        .animate-slide-up-delay-2 {
-            animation: slideUp 1s ease-out 0.8s forwards;
-            opacity: 0;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideUp {
-            from { transform: translateY(40px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .timeline-item {
-            position: relative;
-            padding-left: 40px;
-            transition: all 0.3s ease;
-        }
-        .timeline-item:hover {
-            transform: translateX(10px);
-        }
+        .timeline-item { position: relative; padding-left: 40px; transition: all 0.3s ease; }
         .timeline-item::before {
             content: '';
             position: absolute;
@@ -89,10 +143,10 @@
             top: 8px;
             width: 16px;
             height: 16px;
-            background: linear-gradient(90deg, #4f46e5, #ec4899);
+            background: linear-gradient(90deg, #818cf8, #f472b6);
             border-radius: 50%;
-            border: 3px solid #0a0a0a;
-            box-shadow: 0 0 15px rgba(79, 70, 229, 0.7);
+            border: 3px solid #1a1a2e;
+            box-shadow: 0 0 15px rgba(129, 140, 248, 0.7);
         }
         .timeline-item:not(:last-child)::after {
             content: '';
@@ -101,110 +155,35 @@
             top: 24px;
             width: 2px;
             height: calc(100% - 24px);
-            background: linear-gradient(to bottom, #4f46e5, #ec4899);
+            background: linear-gradient(to bottom, #818cf8, #f472b6);
             opacity: 0.5;
         }
-        #loader { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: radial-gradient(circle, #1e1e2f, #0a0a0a); 
-            display: flex; justify-content: center; align-items: center; 
-            z-index: 1000; transition: opacity 1s ease-out; 
-        }
-        .loader-text { 
-            font-size: 28px; 
-            letter-spacing: 3px; 
-            text-transform: uppercase; 
-            color: #e0e0e0; 
-            position: absolute; 
-            top: 60%; 
-            transform: translateY(-50%); 
-        }
-        .loader {
-            overflow: visible;
-            height: fit-content;
-            width: fit-content;
-            padding: 20px;
-            display: flex;
-        }
-        .logo {
-            fill: none;
-            stroke-dasharray: 50px; /* Adjusted for "t" shape */
-            stroke: #4f46e5; /* Matches portfolio accent */
-            animation: load 15s infinite linear;
-            width: 150px;
-            height: 150px;
-        }
-        @keyframes load {
-            0% {
-                stroke-dashoffset: 0px;
-            }
-            100% {
-                stroke-dashoffset: 500px; /* 10x stroke-dasharray */
-            }
-        }
-        canvas { display: block; position: absolute; top: 0; left: 0; z-index: -1; opacity: 0.5; }
-        .hover-glow {
-            transition: all 0.3s ease;
-        }
-        .hover-glow:hover {
-            box-shadow: 0 0 20px rgba(79, 70, 229, 0.6);
-            transform: translateY(-5px);
-        }
-        .parallax-section {
-            position: relative;
-            overflow: hidden;
-            background-attachment: fixed;
-            background-position: center;
-            background-size: cover;
-        }
-        .parallax-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            will-change: transform;
-        }
-        #hero .parallax-bg {
-            background: url('https://ik.imagekit.io/hswtnwf8i/stars-bg.jpg') no-repeat center center;
-            background-size: cover;
-        }
-        #about .parallax-bg {
-            background: url('https://ik.imagekit.io/hswtnwf8i/abstract-tech-bg.jpg') no-repeat center center;
-            background-size: cover;
-        }
-        #projects .parallax-bg {
-            background: url('https://ik.imagekit.io/hswtnwf8i/digital-grid-bg.jpg') no-repeat center center;
-            background-size: cover;
-        }
+
+        /* Animations for content appearance */
+        .animate-fade-in { animation: fadeIn 1.5s ease-in-out; }
+        .animate-slide-up { animation: slideUp 1s ease-out; }
+        .animate-slide-up-delay { animation: slideUp 1s ease-out 0.4s forwards; opacity: 0; }
+        .animate-slide-up-delay-2 { animation: slideUp 1s ease-out 0.8s forwards; opacity: 0; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body class="antialiased">
 
+    <!-- LOADER BLOCK -->
     <div id="loader">
         <div class="loader">
-            <svg
-                class="logo"
-                xmlns="http://www.w3.org/2000/svg"
-                width="150"
-                height="150"
-                viewBox="0 0 150 150"
-            >
-                <!-- Simplified "t" path based on the image -->
-                <path
-                    d="M 60 20 L 60 80 L 70 80 L 70 20 L 80 20 L 80 100 L 50 100 L 50 20 Z"
-                    stroke-width="10"
-                ></path>
-            </svg>
+            <!-- Using the user-provided image URL for the static logo placeholder -->
+            <img src="https://ik.imagekit.io/hswtnwf8i/Untitled%20(37).png?updatedAt=1763118080646" 
+                 alt="tarmacq logo" 
+                 class="w-24 h-24 rounded-full" />
         </div>
-        <div class="loader-text"></div>
     </div>
 
     <!-- Header Section -->
-    <header class="bg-gray-900 text-white shadow-2xl sticky top-0 z-50 backdrop-blur-md">
+    <header id="main-header" class="text-white shadow-2xl sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="#" class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-pink-500">tarmacq</a>
+            <a href="#" class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-500">tarmacq</a>
             <nav class="hidden md:flex space-x-10">
                 <a href="#about" class="hover:text-accent transition-colors duration-300">About</a>
                 <a href="#services" class="hover:text-accent transition-colors duration-300">Services</a>
@@ -238,15 +217,14 @@
         </nav>
     </div>
 
-    <!-- Hero Section with 3D Parallax -->
-    <section id="hero" class="parallax-section relative py-32 text-center overflow-hidden">
-        <div class="parallax-bg" data-parallax-speed="0.3"></div>
-        <canvas id="hero-canvas" class="absolute inset-0"></canvas>
-        <div class="absolute inset-0 bg-gradient-to-br from-gray-900 to-indigo-900 opacity-70"></div>
+    <!-- Hero Section with 3D Liquid Plane -->
+    <section id="hero" class="relative py-32 text-center overflow-hidden min-h-screen flex items-center justify-center">
+        <!-- 3D Canvas -->
+        <canvas id="hero-canvas"></canvas>
         <div class="container mx-auto px-4 relative z-10">
-            <img class="w-48 h-48 rounded-full mx-auto mb-10 border-4 border-indigo-500 shadow-2xl animate-fade-in hover:rotate-6 transition-transform duration-500" src="https://ik.imagekit.io/hswtnwf8i/Untitled%20(33).png?updatedAt=1761329593382" alt="tarmacq Profile Picture" />
-            <h1 class="text-5xl sm:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-500 mb-6 animate-slide-up">Hi, I'm tarmacq.</h1>
-            <p class="text-xl text-gray-200 max-w-4xl mx-auto mb-10 animate-slide-up-delay">
+            <img class="w-48 h-48 rounded-full mx-auto mb-10 border-4 border-indigo-500 shadow-2xl animate-fade-in hover:rotate-6 transition-transform duration-500" src="https://ik.imagekit.io/hswtnwf8i/Untitled%20(37).png?updatedAt=1763118080646" alt="tarmacq Profile Picture" />
+            <h1 data-speed="0.9" class="parallax-el text-5xl sm:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-pink-400 mb-6 animate-slide-up">Hi, I'm tarmacq.</h1>
+            <p data-speed="0.95" class="parallax-el text-xl text-gray-200 max-w-4xl mx-auto mb-10 animate-slide-up-delay">
                 A passionate <span class="text-accent font-semibold">Web Developer</span> and <span class="text-accent font-semibold">UI/UX Designer</span> crafting immersive, high-performance digital experiences.
             </p>
             <a href="#projects" class="inline-block bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-medium py-4 px-10 rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:scale-110 animate-slide-up-delay-2">
@@ -256,12 +234,11 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="parallax-section py-24">
-        <div class="parallax-bg" data-parallax-speed="0.2"></div>
+    <section id="about" class="py-24 relative overflow-hidden">
         <div class="container mx-auto px-4 relative z-10">
-            <h2 class="section-heading text-center">About Me</h2>
+            <h2 data-speed="0.9" class="parallax-el section-heading text-center">About tarmacq</h2>
             <div class="flex flex-col md:flex-row items-center md:space-x-16">
-                <div class="md:w-1/2 mb-10 md:mb-0 animate-slide-up">
+                <div data-speed="1" class="parallax-el md:w-1/2 mb-10 md:mb-0 animate-slide-up">
                     <p class="text-gray-300 mb-6 leading-relaxed text-lg">
                         As a Web Developer, I'm driven by the art of blending innovative design with robust code. My journey started with a spark of curiosity about digital creation, evolving into a profession where I build scalable, user-centric solutions.
                     </p>
@@ -269,8 +246,8 @@
                         Proficient in HTML, CSS, JavaScript, Python, Discord.JS, and Git, I thrive on merging aesthetics with functionality. Always exploring new tech, I'm ready for the next challenge.
                     </p>
                 </div>
-                <div class="md:w-1/2">
-                    <img src="https://ik.imagekit.io/hswtnwf8i/t-4%20(1).png?updatedAt=1758376284273" alt="About Me" class="rounded-2xl shadow-2xl transform hover:scale-105 hover:rotate-3 transition-transform duration-500">
+                <div data-speed="1.1" class="parallax-el md:w-1/2">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/Untitled%20(37).png?updatedAt=1763118080646" alt="About Me" class="rounded-2xl shadow-2xl transform hover:scale-105 hover:rotate-3 transition-transform duration-500">
                 </div>
             </div>
         </div>
@@ -279,17 +256,17 @@
     <!-- Services Section -->
     <section id="services" class="py-24">
         <div class="container mx-auto px-4">
-            <h2 class="section-heading text-center">Services</h2>
+            <h2 data-speed="0.9" class="parallax-el section-heading text-center">Services</h2>
             <div class="grid md:grid-cols-3 gap-10">
-                <div class="bg-card p-10 rounded-2xl shadow-xl hover-glow">
+                <div data-speed="1" class="parallax-el glass-card p-10 rounded-2xl shadow-xl">
                     <h3 class="text-2xl font-semibold text-white mb-4">Web Development</h3>
                     <p class="text-gray-300">Crafting responsive, performant websites and apps from concept to deployment.</p>
                 </div>
-                <div class="bg-card p-10 rounded-2xl shadow-xl hover-glow">
+                <div data-speed="1.05" class="parallax-el glass-card p-10 rounded-2xl shadow-xl">
                     <h3 class="text-2xl font-semibold text-white mb-4">UI/UX Design</h3>
                     <p class="text-gray-300">Designing intuitive interfaces that prioritize user engagement and satisfaction.</p>
                 </div>
-                <div class="bg-card p-10 rounded-2xl shadow-xl hover-glow">
+                <div data-speed="1.1" class="parallax-el glass-card p-10 rounded-2xl shadow-xl">
                     <h3 class="text-2xl font-semibold text-white mb-4">Technical Consulting</h3>
                     <p class="text-gray-300">Expert advice on tech stacks, optimization, and strategic project execution.</p>
                 </div>
@@ -297,34 +274,41 @@
         </div>
     </section>
 
-    <!-- Skills Section with 3D Icons -->
-    <section id="skills" class="py-24 bg-gradient-to-b from-gray-800 to-gray-900">
+    <!-- Skills Section with 3D Tilt -->
+    <section id="skills" class="py-24">
         <div class="container mx-auto px-4">
-            <h2 class="section-heading text-center">My Skills</h2>
+            <h2 data-speed="0.9" class="parallax-el section-heading text-center">My Skills</h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-10 text-center">
-                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow relative">
-                    <canvas class="skill-canvas w-full h-24" data-color="0xff0000"></canvas>
-                    <p class="text-base font-medium mt-4">HTML</p>
+                
+                <div style="perspective: 1000px;">
+                    <div class="glass-card skill-card-tilt p-8 rounded-2xl shadow-xl h-32 flex items-center justify-center">
+                        <p class="text-lg font-medium mt-4 text-white">HTML</p>
+                    </div>
                 </div>
-                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow relative">
-                    <canvas class="skill-canvas w-full h-24" data-color="0x0000ff"></canvas>
-                    <p class="text-base font-medium mt-4">CSS</p>
+                <div style="perspective: 1000px;">
+                    <div class="glass-card skill-card-tilt p-8 rounded-2xl shadow-xl h-32 flex items-center justify-center">
+                        <p class="text-lg font-medium mt-4 text-white">CSS</p>
+                    </div>
                 </div>
-                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow relative">
-                    <canvas class="skill-canvas w-full h-24" data-color="0xffff00"></canvas>
-                    <p class="text-base font-medium mt-4">JavaScript</p>
+                <div style="perspective: 1000px;">
+                    <div class="glass-card skill-card-tilt p-8 rounded-2xl shadow-xl h-32 flex items-center justify-center">
+                        <p class="text-lg font-medium mt-4 text-white">JavaScript</p>
+                    </div>
                 </div>
-                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow relative">
-                    <canvas class="skill-canvas w-full h-24" data-color="0x00ff00"></canvas>
-                    <p class="text-base font-medium mt-4">Python</p>
+                <div style="perspective: 1000px;">
+                    <div class="glass-card skill-card-tilt p-8 rounded-2xl shadow-xl h-32 flex items-center justify-center">
+                        <p class="text-lg font-medium mt-4 text-white">Python</p>
+                    </div>
                 </div>
-                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow relative">
-                    <canvas class="skill-canvas w-full h-24" data-color="0xff00ff"></canvas>
-                    <p class="text-base font-medium mt-4">Discord.JS</p>
+                <div style="perspective: 1000px;">
+                    <div class="glass-card skill-card-tilt p-8 rounded-2xl shadow-xl h-32 flex items-center justify-center">
+                        <p class="text-lg font-medium mt-4 text-white">Discord.JS</p>
+                    </div>
                 </div>
-                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow relative">
-                    <canvas class="skill-canvas w-full h-24" data-color="0x00ffff"></canvas>
-                    <p class="text-base font-medium mt-4">Git</p>
+                <div style="perspective: 1000px;">
+                    <div class="glass-card skill-card-tilt p-8 rounded-2xl shadow-xl h-32 flex items-center justify-center">
+                        <p class="text-lg font-medium mt-4 text-white">Git</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -333,19 +317,19 @@
     <!-- Experience Section -->
     <section id="experience" class="py-24">
         <div class="container mx-auto px-4">
-            <h2 class="section-heading text-center">Experience</h2>
+            <h2 data-speed="0.9" class="parallax-el section-heading text-center">Experience</h2>
             <div class="max-w-4xl mx-auto space-y-12">
-                <div class="timeline-item hover-glow">
+                <div data-speed="1" class="parallax-el timeline-item glass-card p-6 rounded-lg">
                     <h3 class="text-2xl font-semibold text-white">Discovered Web Development</h3>
                     <p class="text-gray-300 text-sm italic">May 2025</p>
                     <p class="text-gray-300 mt-3">Realized web development's accessibility and potential as a career path.</p>
                 </div>
-                <div class="timeline-item hover-glow">
+                <div data-speed="1.05" class="parallax-el timeline-item glass-card p-6 rounded-lg">
                     <h3 class="text-2xl font-semibold text-white">Started Building/Offering Services for Virtual Airlines</h3>
                     <p class="text-gray-300 text-sm italic">June 2025</p>
                     <p class="text-gray-300 mt-3">Began creating websites and services for Virtual Airlines in the Project Flight community.</p>
                 </div>
-                <div class="timeline-item hover-glow">
+                <div data-speed="1.1" class="parallax-el timeline-item glass-card p-6 rounded-lg">
                     <h3 class="text-2xl font-semibold text-white">Continuing Growth</h3>
                     <p class="text-gray-300 text-sm italic">Sept. 2025</p>
                     <p class="text-gray-300 mt-3">Ongoing learning, skill enhancement, and tackling advanced projects.</p>
@@ -355,12 +339,11 @@
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="parallax-section py-24">
-        <div class="parallax-bg" data-parallax-speed="0.4"></div>
+    <section id="projects" class="py-24">
         <div class="container mx-auto px-4 relative z-10">
-            <h2 class="section-heading text-center">My Projects</h2>
+            <h2 data-speed="0.9" class="parallax-el section-heading text-center">My Projects</h2>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
-                <div class="bg-card rounded-2xl shadow-xl overflow-hidden hover-glow">
+                <div data-speed="1" class="parallax-el glass-card rounded-2xl shadow-xl overflow-hidden">
                     <img src="https://ik.imagekit.io/hswtnwf8i/554b28d7bef840bea458134d767f2254-oneworld-sky-flipper.jpg?updatedAt=1753266279065" alt="Project 1" class="w-full h-56 object-cover transform hover:scale-110 transition-transform duration-500">
                     <div class="p-8">
                         <h3 class="text-2xl font-semibold text-white mb-3"><strong>one</strong>world virtual PF</h3>
@@ -372,19 +355,19 @@
                         </a>
                     </div>
                 </div>
-                <div class="bg-card rounded-2xl shadow-xl overflow-hidden hover-glow">
+                <div data-speed="1.05" class="parallax-el glass-card rounded-2xl shadow-xl overflow-hidden">
                     <img src="https://jsali-lvrgt.github.io/jsali_lvrgt.png" alt="Project 2" class="w-full h-56 object-cover transform hover:scale-110 transition-transform duration-500">
                     <div class="p-8">
                         <h3 class="text-2xl font-semibold text-white mb-3">jsali_lvrgt</h3>
                         <p class="text-gray-300 mb-5 text-base">
                             A scientific journey; click below to learn more.
                         </p>
-                        <a href="https://jsali-lvrgt.github.io" class="inline-block text-accent font-medium hover:underline transition-colors">
+                        <a href="https://jsali.tarmacq.com" class="inline-block text-accent font-medium hover:underline transition-colors">
                             View Project &rarr;
                         </a>
                     </div>
                 </div>
-                <div class="bg-card rounded-2xl shadow-xl overflow-hidden hover-glow">
+                <div data-speed="1.1" class="parallax-el glass-card rounded-2xl shadow-xl overflow-hidden">
                     <img src="https://ik.imagekit.io/hswtnwf8i/t-5%20(3).png?updatedAt=1760297175190" alt="Project 3" class="w-full h-56 object-cover transform hover:scale-110 transition-transform duration-500">
                     <div class="p-8">
                         <h3 class="text-2xl font-semibold text-white mb-3">tarmacq studios</h3>
@@ -403,10 +386,10 @@
     <!-- Testimonials Section -->
     <section id="testimonials" class="py-24">
         <div class="container mx-auto px-4">
-            <h2 class="section-heading text-center">Reviews</h2>
+            <h2 data-speed="0.9" class="parallax-el section-heading text-center">Reviews</h2>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow">
-                    <p class="text-gray-300 mb-6 italic text-base">"tarmacq has always been amazing at coding. I still remember when me and my old bot dev were working together, we’d always talk about how good he was and how seriously he takes what he does. From the very first server I ever made, I’ve always asked tarmacq to join me in my dev programs, no matter what server I was running."</p>
+                <div data-speed="1" class="parallax-el glass-card p-8 rounded-2xl shadow-xl">
+                    <p class="text-gray-300 mb-6 italic text-base">"tarmacq has always been amazing at coding..."</p>
                     <div class="flex items-center">
                         <img class="w-14 h-14 rounded-full mr-4 shadow-md" src="https://ik.imagekit.io/hswtnwf8i/c9ec2ac42f8e0b4d302cfd7b174fb921.webp_size=1024?updatedAt=1758375404749" alt="Client 1">
                         <div>
@@ -415,8 +398,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow">
-                    <p class="text-gray-300 mb-6 italic text-base">"tarmacq is honestly one of the best devs I know. He’s super creative with his work and always finds a way to make things look clean and professional. Every time he builds something, it’s better than the last, and he’s always down to help out or try something new. If you're looking for someone who really knows what he’s doing, he’s your guy."</p>
+                <div data-speed="1.05" class="parallax-el glass-card p-8 rounded-2xl shadow-xl">
+                    <p class="text-gray-300 mb-6 italic text-base">"tarmacq is honestly one of the best devs I know..."</p>
                     <div class="flex items-center">
                         <img class="w-14 h-14 rounded-full mr-4 shadow-md" src="https://ik.imagekit.io/hswtnwf8i/ronnieliang-pilot.png_ex=68cfffad&is=68ceae2d&hm=8e201ec1ef5872f4dbf8b6eb7cfa60b1da5698cb55d9c182f59b6bc4be15f8b9&?updatedAt=1758375514676" alt="Client 2">
                         <div>
@@ -425,8 +408,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow">
-                    <p class="text-gray-300 mb-6 italic text-base">"tarmacq is a very active and passionate developer who has built impressive projects, including websites and Discord bots. With strong skills in coding, he have experience working with languages such as JavaScript and HTML, which you use to bring creative and functional ideas to life. Your ability to take on diverse projects showcases both his technical expertise and his dedication to continuous learning and growth as a developer."</p>
+                <div data-speed="1.1" class="parallax-el glass-card p-8 rounded-2xl shadow-xl">
+                    <p class="text-gray-300 mb-6 italic text-base">"tarmacq is a very active and passionate developer..."</p>
                     <div class="flex items-center">
                         <img class="w-14 h-14 rounded-full mr-4 shadow-md" src="https://ik.imagekit.io/hswtnwf8i/8250fecdc62c4e42a693196f2179f18f.webp_size=1024?updatedAt=1758378502069" alt="Client 3">
                         <div>
@@ -440,19 +423,19 @@
     </section>
 
     <!-- Blog Section -->
-    <section id="blog" class="py-24 bg-gradient-to-b from-gray-800 to-gray-900">
+    <section id="blog" class="py-24">
         <div class="container mx-auto px-4">
-            <h2 class="section-heading text-center">Latest Work</h2>
+            <h2 data-speed="0.9" class="parallax-el section-heading text-center">Latest Work</h2>
             <div class="grid md:grid-cols-2 gap-10">
-                <div class="bg-card p-8 rounded-2xl shadow-xl flex items-center space-x-6 hover-glow">
+                <div data-speed="1" class="parallax-el glass-card p-8 rounded-2xl shadow-xl flex items-center space-x-6">
                     <img src="https://ik.imagekit.io/hswtnwf8i/t-2%20(11).png?updatedAt=1760178591570" class="rounded-lg h-28 w-28 object-cover shadow-md">
                     <div>
                         <h3 class="text-2xl font-semibold text-white mb-2">tarmacq news</h3>
                         <p class="text-gray-300 text-base mb-3">One of my best website!</p>
-                        <a href="https://tarmacq.github.io/news" class="text-accent font-medium hover:underline">Take a Look &rarr;</a>
+                        <a href="https://news.tarmacq.com" class="text-accent font-medium hover:underline">Take a Look &rarr;</a>
                     </div>
                 </div>
-                <div class="bg-card p-8 rounded-2xl shadow-xl flex items-center space-x-6 hover-glow">
+                <div data-speed="1.05" class="parallax-el glass-card p-8 rounded-2xl shadow-xl flex items-center space-x-6">
                     <img src="https://ik.imagekit.io/hswtnwf8i/t-2%20(12).png?updatedAt=1760191192081" class="rounded-lg h-28 w-28 object-cover shadow-md">
                     <div>
                         <h3 class="text-2xl font-semibold text-white mb-2">tarmacq weather</h3>
@@ -465,10 +448,10 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-24 bg-gray-900">
+    <section id="contact" class="py-24">
         <div class="container mx-auto px-4 text-center">
-            <h2 class="section-heading mb-10">Get in Touch</h2>
-            <p class="text-gray-300 mb-10 max-w-2xl mx-auto text-lg">
+            <h2 data-speed="0.9" class="parallax-el section-heading mb-10">Get in Touch</h2>
+            <p data-speed="0.95" class="parallax-el text-gray-300 mb-10 max-w-2xl mx-auto text-lg">
                 Excited for new collaborations? Drop a message for projects, questions, or just a hello.
             </p>
             <a href="mailto:ryanyagouni@gmail.com" class="inline-block bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-medium py-4 px-12 rounded-full shadow-2xl hover:shadow-indigo-500/50 transition-all transform hover:scale-105">
@@ -492,7 +475,7 @@
     </section>
 
     <!-- Footer Section -->
-    <footer class="bg-gray-900 text-gray-400 py-10 text-center">
+    <footer class="text-gray-400 py-10 text-center">
         <div class="container mx-auto px-4">
             <p>&copy; 2025 tarmacq. All Rights Reserved.</p>
             <br>
@@ -500,8 +483,51 @@
         </div>
     </footer>
 
+    <!-- --- INLINE JAVASCRIPT --- -->
     <script>
-        // Mobile Menu Script
+        // Libraries are now globally available: THREE, gsap, ScrollTrigger, RGBELoader
+
+        // --- Global variables for 3D state ---
+        let scene, camera, renderer, orb;
+        let canvas, heroSection;
+        let initialPositions;
+        
+        // --- Setup GSAP & Get DOM elements ---
+        window.onload = function() {
+            // Check if GSAP and Three.js are loaded
+            if (typeof gsap === 'undefined' || typeof THREE === 'undefined') {
+                console.error("GSAP or THREE.js not loaded. Skipping advanced features.");
+                document.getElementById("loader").style.display = "none";
+                return;
+            }
+            
+            gsap.registerPlugin(ScrollTrigger);
+            
+            canvas = document.getElementById('hero-canvas');
+            heroSection = document.getElementById('hero');
+
+            // --- Loader Fade Out ---
+            // Fade out the loader quickly once the entire page is loaded
+            gsap.to("#loader", { 
+                opacity: 0, 
+                duration: 0.8, 
+                delay: 0.3, 
+                onComplete: () => {
+                    document.getElementById("loader").style.display = "none";
+                    // Initialize 3D and other effects after the loader is gone
+                    initHero3D();
+                    initParallax();
+                    initSkillCardTilt();
+                } 
+            });
+        };
+
+
+        // --- Mobile Menu Script ---
+        function closeMenu() {
+            document.getElementById('mobile-menu').classList.add('-translate-y-full');
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
             const closeMenuBtn = document.getElementById('close-mobile-menu-btn');
@@ -512,91 +538,154 @@
                 mobileMenu.classList.remove('-translate-y-full');
             });
 
-            closeMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.add('-translate-y-full');
-            });
+            closeMenuBtn.addEventListener('click', closeMenu);
+            navLinks.forEach(link => link.addEventListener('click', closeMenu));
+        });
+        
+        // --- Interactive 3D Hero Scene (Liquid Plane) ---
+        function initHero3D() {
+            if (!canvas || !heroSection) return;
 
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('-translate-y-full');
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(75, heroSection.clientWidth / heroSection.clientHeight, 0.1, 1000);
+            camera.position.z = 1.5;
+
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            renderer.setSize(heroSection.clientWidth, heroSection.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+
+            const pmremGenerator = new THREE.PMREMGenerator(renderer);
+            pmremGenerator.compileEquirectangularShader();
+            
+            // THREE.RGBELoader is available globally after loading the script
+            new THREE.RGBELoader() 
+                .setDataType(THREE.FloatType)
+                .load('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/neon_photostudio_1k.hdr', (texture) => {
+                    const envMap = pmremGenerator.fromEquirectangular(texture).texture;
+                    scene.environment = envMap;
+                    texture.dispose();
+                    pmremGenerator.dispose();
                 });
+
+            // Plane Geometry (3x3 with high segments for liquid effect)
+            const geometry = new THREE.PlaneGeometry(3, 3, 64, 64);
+            
+            initialPositions = geometry.attributes.position.array.slice(); 
+
+            // Liquid Glass Material 
+            const material = new THREE.MeshPhysicalMaterial({
+                roughness: 0,
+                metalness: 0.5,
+                transmission: 1.0,
+                opacity: 1.0,
+                ior: 1.5,
+                thickness: 0.2, 
+                clearcoat: 1.0,
+                clearcoatRoughness: 0,
+                envMapIntensity: 1.5
             });
 
-            // Loader Fade Out
-            gsap.to("#loader", { opacity: 0, duration: 1, delay: 2, onComplete: () => document.getElementById("loader").style.display = "none" });
+            orb = new THREE.Mesh(geometry, material);
+            scene.add(orb);
 
-            // Hero 3D Background with Parallax
-            const heroCanvas = document.getElementById('hero-canvas');
-            const heroScene = new THREE.Scene();
-            const heroCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const heroRenderer = new THREE.WebGLRenderer({ canvas: heroCanvas, alpha: true });
-            heroRenderer.setSize(window.innerWidth, window.innerHeight);
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(ambientLight);
+            const pointLight = new THREE.PointLight(0xffffff, 2);
+            pointLight.position.set(5, 5, 5);
+            scene.add(pointLight);
 
-            const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
-            const material = new THREE.MeshBasicMaterial({ color: 0x4f46e5, wireframe: true });
-            const torusKnot = new THREE.Mesh(geometry, material);
-            heroScene.add(torusKnot);
+            animateHero3D();
+        }
 
-            heroCamera.position.z = 30;
+        function animateHero3D() {
+            if (!renderer) return;
 
-            function animateHero() {
-                requestAnimationFrame(animateHero);
-                torusKnot.rotation.x += 0.005;
-                torusKnot.rotation.y += 0.005;
-                heroRenderer.render(heroScene, heroCamera);
+            requestAnimationFrame(animateHero3D);
+
+            const time = performance.now() * 0.001;
+            const positionAttribute = orb.geometry.attributes.position;
+
+            // Vertex displacement for the 'Liquid' effect (Waving Plane)
+            for (let i = 0; i < positionAttribute.count; i++) {
+                const x = initialPositions[i * 3];
+                const y = initialPositions[i * 3 + 1];
+
+                // Creates a complex, evolving sine wave pattern
+                const zOffset = 
+                    0.15 * Math.sin(x * 4 + time * 1.5) + 
+                    0.1 * Math.sin(y * 3 + time * 0.7);
+
+                // Apply Z offset to create the wave/ripple
+                positionAttribute.setZ(i, zOffset);
             }
-            animateHero();
+            positionAttribute.needsUpdate = true;
+            
+            // Subtly rotate the plane for a more dynamic look
+            orb.rotation.z = time * 0.03;
+            orb.rotation.y = time * 0.02;
 
-            // Parallax Scroll Effect
-            const parallaxElements = document.querySelectorAll('.parallax-bg');
-            window.addEventListener('scroll', () => {
-                parallaxElements.forEach(elem => {
-                    const speed = parseFloat(elem.dataset.parallaxSpeed);
-                    const yPos = -(window.pageYOffset * speed);
-                    elem.style.transform = `translate3d(0, ${yPos}px, 0)`;
-                });
+            renderer.render(scene, camera);
+        }
+        
+        // --- Multi-Layer Parallax with GSAP ---
+        function initParallax() {
+            const parallaxElements = document.querySelectorAll('.parallax-el');
 
-                // Parallax for 3D Hero Canvas
-                const scrollY = window.pageYOffset;
-                torusKnot.position.y = -(scrollY * 0.05);
-                heroCamera.position.y = -(scrollY * 0.02);
-                heroCamera.lookAt(torusKnot.position);
-            });
-
-            window.addEventListener('resize', () => {
-                heroCamera.aspect = window.innerWidth / window.innerHeight;
-                heroCamera.updateProjectionMatrix();
-                heroRenderer.setSize(window.innerWidth, window.innerHeight);
-            });
-
-            // Skills 3D Canvases
-            const skillCanvases = document.querySelectorAll('.skill-canvas');
-            skillCanvases.forEach(canvas => {
-                const scene = new THREE.Scene();
-                const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-                const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
-                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-
-                const geo = new THREE.IcosahedronGeometry(1, 0);
-                const mat = new THREE.MeshPhongMaterial({ color: parseInt(canvas.dataset.color), shininess: 100 });
-                const mesh = new THREE.Mesh(geo, mat);
-                scene.add(mesh);
-
-                const light = new THREE.PointLight(0xffffff, 1, 100);
-                light.position.set(5, 5, 5);
-                scene.add(light);
-
-                camera.position.z = 3;
-
-                function animateSkill() {
-                    requestAnimationFrame(animateSkill);
-                    mesh.rotation.x += 0.01;
-                    mesh.rotation.y += 0.01;
-                    renderer.render(scene, camera);
+            parallaxElements.forEach(el => {
+                const speed = el.dataset.speed || 1.0;
+                // Only initialize if GSAP is loaded
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(el, {
+                        y: (i, target) => -(ScrollTrigger.maxScroll(window) * (1 - parseFloat(speed))) / 5,
+                        ease: 'none',
+                        scrollTrigger: {
+                            trigger: el,
+                            start: 'top bottom',
+                            end: 'bottom top',
+                            scrub: 1.5
+                        }
+                    });
                 }
-                animateSkill();
             });
+        }
+
+        // --- 3D Skill Card Tilt Effect ---
+        function initSkillCardTilt() {
+            const skillCards = document.querySelectorAll('.skill-card-tilt');
+
+            skillCards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const midX = rect.width / 2;
+                    const midY = rect.height / 2;
+                    
+                    const rotateX = ((y - midY) / midY) * -7;
+                    const rotateY = ((x - midX) / midX) * 7;
+                    
+                    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+                });
+            });
+        }
+        
+        // --- Handle Window Resizing ---
+        window.addEventListener('resize', () => {
+            if (camera && renderer && heroSection) {
+                camera.aspect = heroSection.clientWidth / heroSection.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(heroSection.clientWidth, heroSection.clientHeight);
+            }
         });
     </script>
+
 </body>
 </html>
