@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="tarmacq">
+  <meta property="og:description" content="Hi, I'm tarmacq.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tarmacq.github.io">
+  <meta property="og:image" content="https://ik.imagekit.io/hswtnwf8i/Untitled%20(33).png?updatedAt=1761329593382">
+  <meta property="og:site_name" content="tarmacq">
+    <title>tarmacq</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://ik.imagekit.io/hswtnwf8i/Untitled%20(33).png?updatedAt=1761329593382" type="image/png" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+        .text-accent {
+            color: #4f46e5;
+        }
+        .bg-card {
+            background-color: #1a1a2e;
+            border: 1px solid rgba(79, 70, 229, 0.2);
+        }
+        .section-heading {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 12px;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #4f46e5, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .section-heading::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #4f46e5, #ec4899);
+            border-radius: 9999px;
+            box-shadow: 0 0 10px rgba(79, 70, 229, 0.5);
+        }
+        .animate-fade-in {
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        .animate-slide-up {
+            animation: slideUp 1s ease-out;
+        }
+        .animate-slide-up-delay {
+            animation: slideUp 1s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+        .animate-slide-up-delay-2 {
+            animation: slideUp 1s ease-out 0.8s forwards;
+            opacity: 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 40px;
+            transition: all 0.3s ease;
+        }
+        .timeline-item:hover {
+            transform: translateX(10px);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(90deg, #4f46e5, #ec4899);
+            border-radius: 50%;
+            border: 3px solid #0a0a0a;
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.7);
+        }
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 24px;
+            width: 2px;
+            height: calc(100% - 24px);
+            background: linear-gradient(to bottom, #4f46e5, #ec4899);
+            opacity: 0.5;
+        }
+        #loader { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: radial-gradient(circle, #1e1e2f, #0a0a0a); 
+            display: flex; justify-content: center; align-items: center; 
+            z-index: 1000; transition: opacity 1s ease-out; 
+        }
+        .loader-text { 
+            font-size: 28px; 
+            letter-spacing: 3px; 
+            text-transform: uppercase; 
+            color: #e0e0e0; 
+            position: absolute; 
+            top: 60%; 
+            transform: translateY(-50%); 
+        }
+        .loader {
+            overflow: visible;
+            height: fit-content;
+            width: fit-content;
+            padding: 20px;
+            display: flex;
+        }
+        .logo {
+            fill: none;
+            stroke-dasharray: 50px; /* Adjusted for "t" shape */
+            stroke: #4f46e5; /* Matches portfolio accent */
+            animation: load 15s infinite linear;
+            width: 150px;
+            height: 150px;
+        }
+        @keyframes load {
+            0% {
+                stroke-dashoffset: 0px;
+            }
+            100% {
+                stroke-dashoffset: 500px; /* 10x stroke-dasharray */
+            }
+        }
+        canvas { display: block; position: absolute; top: 0; left: 0; z-index: -1; opacity: 0.5; }
+        .hover-glow {
+            transition: all 0.3s ease;
+        }
+        .hover-glow:hover {
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.6);
+            transform: translateY(-5px);
+        }
+        .parallax-section {
+            position: relative;
+            overflow: hidden;
+            /* background-attachment: fixed; */ /* Replaced by JS parallax */
+            background-position: center;
+            background-size: cover;
+        }
+        .parallax-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%; /* Slightly larger to prevent gaps */
+            z-index: -2; /* Behind canvas and content */
+            will-change: transform;
+        }
+        #hero .parallax-bg {
+            background: url('https://ik.imagekit.io/hswtnwf8i/stars-bg.jpg') no-repeat center center;
+            background-size: cover;
+        }
+        #about .parallax-bg {
+            background: url('https://ik.imagekit.io/hswtnwf8i/abstract-tech-bg.jpg') no-repeat center center;
+            background-size: cover;
+        }
+        #projects .parallax-bg {
+            background: url('https://ik.imagekit.io/hswtnwf8i/digital-grid-bg.jpg') no-repeat center center;
+            background-size: cover;
+        }
+        #hero-canvas {
+            z-index: -1; /* Behind content, in front of parallax-bg */
+            opacity: 0.3;
+        }
+        .skill-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.2;
+        }
+        .skill-card-content {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="loader">
+        <div class="loader">
+            <svg
+                class="logo"
+                xmlns="http://www.w3.org/2000/svg"
+                width="150"
+                height="150"
+                viewBox="0 0 150 150"
+            >
+                <path
+                    d="M 60 20 L 60 80 L 70 80 L 70 20 L 80 20 L 80 100 L 50 100 L 50 20 Z"
+                    stroke-width="10"
+                ></path>
+            </svg>
+        </div>
+        <div class="loader-text"></div>
+    </div>
+
+    <header class="bg-gray-900 text-white shadow-2xl sticky top-0 z-50 backdrop-blur-md bg-opacity-80">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-pink-500">tarmacq</a>
+            <nav class="hidden md:flex space-x-10">
+                <a href="#about" class="hover:text-accent transition-colors duration-300">About</a>
+                <a href="#services" class="hover:text-accent transition-colors duration-300">Services</a>
+                <a href="#skills" class="hover:text-accent transition-colors duration-300">Skills</a>
+                <a href="#projects" class="hover:text-accent transition-colors duration-300">Projects</a>
+                <a href="#contact" class="hover:text-accent transition-colors duration-300">Contact</a>
+            </nav>
+            <button id="mobile-menu-btn" class="md:hidden focus:outline-none">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <div id="mobile-menu" class="fixed top-0 left-0 w-full h-full bg-gray-900 text-white z-40 transform -translate-y-full transition-transform duration-500 ease-in-out md:hidden">
+        <div class="p-6 text-right">
+            <button id="close-mobile-menu-btn" class="focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <nav class="flex flex-col items-center space-y-10 mt-20 text-3xl">
+            <a href="#about" class="hover:text-accent transition-colors duration-300" onclick="closeMenu()">About</a>
+            <a href="#services" class="hover:text-accent transition-colors duration-300" onclick="closeMenu()">Services</a>
+            <a href="#skills" class="hover:text-accent transition-colors duration-300" onclick="closeMenu()">Skills</a>
+            <a href="#projects" class="hover:text-accent transition-colors duration-300" onclick="closeMenu()">Projects</a>
+            <a href="#contact" class="hover:text-accent transition-colors duration-300" onclick="closeMenu()">Contact</a>
+        </nav>
+    </div>
+
+    <section id="hero" class="parallax-section relative py-32 text-center overflow-hidden min-h-screen flex items-center justify-center">
+        <div class="parallax-bg" data-parallax-speed="0.3"></div>
+        <canvas id="hero-canvas" class="absolute inset-0"></canvas>
+        <div class="absolute inset-0 bg-gradient-to-br from-gray-900 to-indigo-900 opacity-70"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <img class="w-48 h-48 rounded-full mx-auto mb-10 border-4 border-indigo-500 shadow-2xl animate-fade-in hover:rotate-6 transition-transform duration-500" src="https://ik.imagekit.io/hswtnwf8i/Untitled%20(33).png?updatedAt=1761329593382" alt="tarmacq Profile Picture" />
+            <h1 class="text-5xl sm:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-500 mb-6 animate-slide-up">Hi, I'm tarmacq.</h1>
+            <p class="text-xl text-gray-200 max-w-4xl mx-auto mb-10 animate-slide-up-delay">
+                A passionate <span class="text-accent font-semibold">Web Developer</span> and <span class="text-accent font-semibold">UI/UX Designer</span> crafting immersive, high-performance digital experiences.
+            </p>
+            <a href="#projects" class="inline-block bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-medium py-4 px-10 rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:scale-110 animate-slide-up-delay-2">
+                Explore My Work
+            </a>
+        </div>
+    </section>
+
+    <section id="about" class="parallax-section py-24">
+        <div class="parallax-bg" data-parallax-speed="0.2"></div>
+        <div class="absolute inset-0 bg-black opacity-60 z-0"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <h2 class="section-heading text-center">About Me</h2>
+            <div class="flex flex-col md:flex-row items-center md:space-x-16">
+                <div class="md:w-1/2 mb-10 md:mb-0 animate-slide-up">
+                    <p class="text-gray-300 mb-6 leading-relaxed text-lg">
+                        As a Web Developer, I'm driven by the art of blending innovative design with robust code. My journey started with a spark of curiosity about digital creation, evolving into a profession where I build scalable, user-centric solutions.
+                    </p>
+                    <p class="text-gray-300 leading-relaxed text-lg">
+                        Proficient in HTML, CSS, JavaScript, Python, Discord.JS, and Git, I thrive on merging aesthetics with functionality. Always exploring new tech, I'm ready for the next challenge.
+                    </p>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/t-4%20(1).png?updatedAt=1758376284273" alt="About Me" class="rounded-2xl shadow-2xl transform hover:scale-105 hover:rotate-3 transition-transform duration-500">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-24">
+        <div class="container mx-auto px-4">
+            <h2 class="section-heading text-center">Services</h2>
+            <div class="grid md:grid-cols-3 gap-10">
+                <div class="bg-card p-10 rounded-2xl shadow-xl hover-glow">
+                    <h3 class="text-2xl font-semibold text-white mb-4">Web Development</h3>
+                    <p class="text-gray-300">Crafting responsive, performant websites and apps from concept to deployment.</p>
+                </div>
+                <div class="bg-card p-10 rounded-2xl shadow-xl hover-glow">
+                    <h3 class="text-2xl font-semibold text-white mb-4">UI/UX Design</h3>
+                    <p class="text-gray-300">Designing intuitive interfaces that prioritize user engagement and satisfaction.</p>
+                </div>
+                <div class="bg-card p-10 rounded-2xl shadow-xl hover-glow">
+                    <h3 class="text-2xl font-semibold text-white mb-4">Technical Consulting</h3>
+                    <p class="text-gray-300">Expert advice on tech stacks, optimization, and strategic project execution.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="py-24 bg-gradient-to-b from-gray-800 to-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="section-heading text-center">My Skills</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-10 text-center">
+                
+                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow relative overflow-hidden h-36 flex items-center justify-center">
+                    <canvas class="skill-canvas" data-color="0xe44d26"></canvas>
+                    <div class="skill-card-content">
+                        <p class="text-lg font-medium">HTML</p>
+                    </div>
+                </div>
+                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow relative overflow-hidden h-36 flex items-center justify-center">
+                    <canvas class="skill-canvas" data-color="0x264de4"></canvas>
+                    <div class="skill-card-content">
+                        <p class="text-lg font-medium">CSS</p>
+                    </div>
+                </div>
+                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow relative overflow-hidden h-36 flex items-center justify-center">
+                    <canvas class="skill-canvas" data-color="0xf0db4f"></canvas>
+                    <div class="skill-card-content">
+                        <p class="text-lg font-medium">JavaScript</p>
+                    </div>
+                </div>
+                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow relative overflow-hidden h-36 flex items-center justify-center">
+                    <canvas class="skill-canvas" data-color="0x4b8bbe"></canvas>
+                    <div class="skill-card-content">
+                        <p class="text-lg font-medium">Python</p>
+                    </div>
+                </div>
+                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow relative overflow-hidden h-36 flex items-center justify-center">
+                    <canvas class="skill-canvas" data-color="0x7289da"></canvas>
+                    <div class="skill-card-content">
+                        <p class="text-lg font-medium">Discord.JS</p>
+                    </div>
+                </div>
+                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow relative overflow-hidden h-36 flex items-center justify-center">
+                    <canvas class="skill-canvas" data-color="0xf1502f"></canvas>
+                    <div class="skill-card-content">
+                        <p class="text-lg font-medium">Git</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="py-24">
+        <div class="container mx-auto px-4">
+            <h2 class="section-heading text-center">Experience</h2>
+            <div class="max-w-4xl mx-auto space-y-12">
+                <div class="timeline-item hover-glow">
+                    <h3 class="text-2xl font-semibold text-white">Discovered Web Development</h3>
+                    <p class="text-gray-300 text-sm italic">May 2025</p>
+                    <p class="text-gray-300 mt-3">Realized web development's accessibility and potential as a career path.</p>
+                </div>
+                <div class="timeline-item hover-glow">
+                    <h3 class="text-2xl font-semibold text-white">Started Building/Offering Services for Virtual Airlines</h3>
+                    <p class="text-gray-300 text-sm italic">June 2025</p>
+                    <p class="text-gray-300 mt-3">Began creating websites and services for Virtual Airlines in the Project Flight community.</p>
+                </div>
+                <div class="timeline-item hover-glow">
+                    <h3 class="text-2xl font-semibold text-white">Continuing Growth</h3>
+                    <p class="text-gray-300 text-sm italic">Sept. 2025</p>
+                    <p class="text-gray-300 mt-3">Ongoing learning, skill enhancement, and tackling advanced projects.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="parallax-section py-24">
+        <div class="parallax-bg" data-parallax-speed="0.4"></div>
+        <div class="absolute inset-0 bg-black opacity-70 z-0"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <h2 class="section-heading text-center">My Projects</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+                <div class="bg-card rounded-2xl shadow-xl overflow-hidden hover-glow">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/554b28d7bef840bea458134d767f2254-oneworld-sky-flipper.jpg?updatedAt=1753266279065" alt="Project 1" class="w-full h-56 object-cover transform hover:scale-110 transition-transform duration-500">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-semibold text-white mb-3"><strong>one</strong>world virtual PF</h3>
+                        <p class="text-gray-300 mb-5 text-base">
+                            Founder/CEO of <a href="https://oneworldvirtual.gitub.io/main/" class="text-accent hover:underline">oneworld virtual PF</a>, a Virtual Alliance in Project Flight.
+                        </p>
+                        <a href="https://discord.gg/Ac3RqgGbzk" class="inline-block text-accent font-medium hover:underline transition-colors">
+                            View Project &rarr;
+                        </a>
+                    </div>
+                </div>
+                <div class="bg-card rounded-2xl shadow-xl overflow-hidden hover-glow">
+                    <img src="https://jsali-lvrgt.github.io/jsali_lvrgt.png" alt="Project 2" class="w-full h-56 object-cover transform hover:scale-110 transition-transform duration-500">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-semibold text-white mb-3">jsali_lvrgt</h3>
+                        <p class="text-gray-300 mb-5 text-base">
+                            A scientific journey; click below to learn more.
+                        </p>
+                        <a href="https://jsali-lvrgt.github.io" class="inline-block text-accent font-medium hover:underline transition-colors">
+                            View Project &rarr;
+                        </a>
+                    </div>
+                </div>
+                <div class="bg-card rounded-2xl shadow-xl overflow-hidden hover-glow">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/t-5%20(3).png?updatedAt=1760297175190" alt="Project 3" class="w-full h-56 object-cover transform hover:scale-110 transition-transform duration-500">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-semibold text-white mb-3">tarmacq studios</h3>
+                        <p class="text-gray-300 mb-5 text-base">
+                            The official web service from tarmacq to the client.
+                        </p>
+                        <a href="https://instagram.com/tarmacq_studios" class="inline-block text-accent font-medium hover:underline transition-colors">
+                            View Project &rarr;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="py-24">
+        <div class="container mx-auto px-4">
+            <h2 class="section-heading text-center">Reviews</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow">
+                    <p class="text-gray-300 mb-6 italic text-base">"tarmacq has always been amazing at coding. I still remember when me and my old bot dev were working together, we’d always talk about how good he was and how seriously he takes what he does. From the very first server I ever made, I’ve always asked tarmacq to join me in my dev programs, no matter what server I was running."</p>
+                    <div class="flex items-center">
+                        <img class="w-14 h-14 rounded-full mr-4 shadow-md" src="https://ik.imagekit.io/hswtnwf8i/c9ec2ac42f8e0b4d302cfd7b174fb921.webp_size=1024?updatedAt=1758375404749" alt="Client 1">
+                        <div>
+                            <p class="font-semibold text-white"><a href="https://discord.com/users/1134935202091765800/">Gamer1320</a></p>
+                            <p class="text-sm text-gray-400">Founder of <a href="https://discord.gg/TjTGRPq4Rd">ACRV</a> and CEO of Qatar VA</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow">
+                    <p class="text-gray-300 mb-6 italic text-base">"tarmacq is honestly one of the best devs I know. He’s super creative with his work and always finds a way to make things look clean and professional. Every time he builds something, it’s better than the last, and he’s always down to help out or try something new. If you're looking for someone who really knows what he’s doing, he’s your guy."</p>
+                    <div class="flex items-center">
+                        <img class="w-14 h-14 rounded-full mr-4 shadow-md" src="https://ik.imagekit.io/hswtnwf8i/ronnieliang-pilot.png_ex=68cfffad&is=68ceae2d&hm=8e201ec1ef5872f4dbf8b6eb7cfa60b1da5698cb55d9c182f59b6bc4be15f8b9&?updatedAt=1758375514676" alt="Client 2">
+                        <div>
+                            <p class="font-semibold text-white"><a href="https://discord.com/users/841067718110347314">Ilhan</a></p>
+                            <p class="text-sm text-gray-400">Retired Founder of Air europa virtual</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-card p-8 rounded-2xl shadow-xl hover-glow">
+                    <p class="text-gray-300 mb-6 italic text-base">"tarmacq is a very active and passionate developer who has built impressive projects, including websites and Discord bots. With strong skills in coding, he have experience working with languages such as JavaScript and HTML, which you use to bring creative and functional ideas to life. Your ability to take on diverse projects showcases both his technical expertise and his dedication to continuous learning and growth as a developer."</p>
+                    <div class="flex items-center">
+                        <img class="w-14 h-14 rounded-full mr-4 shadow-md" src="https://ik.imagekit.io/hswtnwf8i/8250fecdc62c4e42a693196f2179f18f.webp_size=1024?updatedAt=1758378502069" alt="Client 3">
+                        <div>
+                            <p class="font-semibold text-white"><a href="https://discord.com/users/862312044657115146">camping_n</a></p>
+                            <p class="text-sm text-gray-400">Founder/Chairman Iberia VA</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog" class="py-24 bg-gradient-to-b from-gray-800 to-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="section-heading text-center">Latest Work</h2>
+            <div class="grid md:grid-cols-2 gap-10">
+                <div class="bg-card p-8 rounded-2xl shadow-xl flex items-center space-x-6 hover-glow">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/t-2%20(11).png?updatedAt=1760178591570" class="rounded-lg h-28 w-28 object-cover shadow-md">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-white mb-2">tarmacq news</h3>
+                        <p class="text-gray-300 text-base mb-3">One of my best website!</p>
+                        <a href="https://tarmacq.github.io/news" class="text-accent font-medium hover:underline">Take a Look &rarr;</a>
+                    </div>
+                </div>
+                <div class="bg-card p-8 rounded-2xl shadow-xl flex items-center space-x-6 hover-glow">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/t-2%20(12).png?updatedAt=1760191192081" class="rounded-lg h-28 w-28 object-cover shadow-md">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-white mb-2">tarmacq weather</h3>
+                        <p class="text-gray-300 text-base mb-3">one of the unfinished projects you can't see it now.</p>
+                        <a href="https://instagram.com/tarmacq" class="text-accent font-medium hover:underline">Subscribe to my Instagram (its better) &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-24 bg-gray-900">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="section-heading mb-10">Get in Touch</h2>
+            <p class="text-gray-300 mb-10 max-w-2xl mx-auto text-lg">
+                Excited for new collaborations? Drop a message for projects, questions, or just a hello.
+            </p>
+            <a href="mailto:ryanyagouni@gmail.com" class="inline-block bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-medium py-4 px-12 rounded-full shadow-2xl hover:shadow-indigo-500/50 transition-all transform hover:scale-105">
+                Send an Email
+            </a>
+            <div class="flex justify-center space-x-8 mt-12">
+                <a href="https://instagram.com/tarmacq" class="text-gray-400 hover:text-accent transition-colors duration-300 transform hover:scale-125">
+                    <img class="w-10 h-10" src="https://static.vecteezy.com/system/resources/previews/018/930/415/non_2x/instagram-logo-instagram-icon-transparent-free-png.png" alt="Instagram">
+                </a>
+                <a href="https://x.com/tarmacq" class="text-gray-400 hover:text-accent transition-colors duration-300 transform hover:scale-125">
+                    <img class="w-10 h-10" src="https://static.vecteezy.com/system/resources/previews/042/148/611/non_2x/new-twitter-x-logo-twitter-icon-x-social-media-icon-free-png.png" alt="X">
+                </a>
+                <a href="https://discord.com/users/1129726655569600602" class="text-gray-400 hover:text-accent transition-colors duration-300 transform hover:scale-125">
+                    <img class="w-10 h-10" src="https://static.vecteezy.com/system/resources/previews/018/930/718/non_2x/discord-logo-discord-icon-transparent-free-png.png" alt="Discord">
+                </a>
+                <a href="https://www.reddit.com/user/tarmacq" class="text-gray-400 hover:text-accent transition-colors duration-300 transform hover:scale-125">
+                    <img class="w-10 h-10" src="https://static.vecteezy.com/system/resources/previews/018/930/474/non_2x/reddit-logo-reddit-icon-transparent-free-png.png" alt="Reddit">
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-gray-400 py-10 text-center">
+        <div class="container mx-auto px-4">
+            <p>&copy; 2025 tarmacq. All Rights Reserved.</p>
+            <br>
+            <p><a href="https://tarmacq.github.io/terms">terms</a> | <a href="https://tarmacq.github.io/pp">privacy policy</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Script
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const closeMenuBtn = document.getElementById('close-mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const navLinks = document.querySelectorAll('#mobile-menu a');
+
+            function closeMenu() {
+                mobileMenu.classList.add('-translate-y-full');
+            }
+
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.remove('-translate-y-full');
+            });
+
+            closeMenuBtn.addEventListener('click', closeMenu);
+            navLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+            // Loader Fade Out
+            gsap.to("#loader", { opacity: 0, duration: 1, delay: 2, onComplete: () => document.getElementById("loader").style.display = "none" });
+
+            // Hero 3D Background with Parallax
+            const heroCanvas = document.getElementById('hero-canvas');
+            const heroScene = new THREE.Scene();
+            const heroCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const heroRenderer = new THREE.WebGLRenderer({ canvas: heroCanvas, alpha: true });
+            heroRenderer.setSize(window.innerWidth, window.innerHeight);
+
+            const heroGeometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
+            const heroMaterial = new THREE.MeshBasicMaterial({ color: 0x4f46e5, wireframe: true });
+            const torusKnot = new THREE.Mesh(heroGeometry, heroMaterial);
+            heroScene.add(torusKnot);
+
+            heroCamera.position.z = 30;
+
+            function animateHero() {
+                requestAnimationFrame(animateHero);
+                torusKnot.rotation.x += 0.005;
+                torusKnot.rotation.y += 0.005;
+                heroRenderer.render(heroScene, heroCamera);
+            }
+            animateHero();
+
+            // Parallax Scroll Effect
+            const parallaxElements = document.querySelectorAll('.parallax-bg');
+            window.addEventListener('scroll', () => {
+                const scrollY = window.pageYOffset;
+
+                parallaxElements.forEach(elem => {
+                    const speed = parseFloat(elem.dataset.parallaxSpeed);
+                    const yPos = -(scrollY * speed);
+                    elem.style.transform = `translate3d(0, ${yPos}px, 0)`;
+                });
+
+                // Parallax for 3D Hero Canvas
+                torusKnot.position.y = -(scrollY * 0.05);
+                heroCamera.position.y = -(scrollY * 0.02);
+                heroCamera.lookAt(torusKnot.position);
+            });
+
+            // --- COMPLETED SCRIPT FOR SKILLS ---
+            
+            const skillCanvases = document.querySelectorAll('.skill-canvas');
+            const skillScenes = []; // Store scenes, cameras, renderers, meshes
+
+            skillCanvases.forEach(canvas => {
+                const scene = new THREE.Scene();
+                const rect = canvas.parentElement.getBoundingClientRect();
+                
+                const camera = new THREE.PerspectiveCamera(75, rect.width / rect.height, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+                renderer.setSize(rect.width, rect.height);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+                const geometry = new THREE.IcosahedronGeometry(1.2, 0); // A cool geometric shape
+                const color = parseInt(canvas.dataset.color, 16);
+                const material = new THREE.MeshBasicMaterial({ color: color, wireframe: true });
+                const mesh = new THREE.Mesh(geometry, material);
+                
+                scene.add(mesh);
+                camera.position.z = 2.5;
+
+                skillScenes.push({ scene, camera, renderer, mesh, canvas });
+            });
+
+            function animateSkills() {
+                requestAnimationFrame(animateSkills);
+                
+                skillScenes.forEach(item => {
+                    item.mesh.rotation.x += 0.01;
+                    item.mesh.rotation.y += 0.01;
+                    item.renderer.render(item.scene, item.camera);
+                });
+            }
+            animateSkills();
+            
+            // --- END OF COMPLETED SCRIPT ---
+
+
+            // Handle Window Resizing
+            window.addEventListener('resize', () => {
+                // Hero Canvas Resize
+                heroCamera.aspect = window.innerWidth / window.innerHeight;
+                heroCamera.updateProjectionMatrix();
+                heroRenderer.setSize(window.innerWidth, window.innerHeight);
+
+                // Skill Canvases Resize
+                skillScenes.forEach(item => {
+                    const rect = item.canvas.parentElement.getBoundingClientRect();
+                    item.renderer.setSize(rect.width, rect.height);
+                    item.camera.aspect = rect.width / rect.height;
+                    item.camera.updateProjectionMatrix();
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
