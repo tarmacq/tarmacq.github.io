@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AirSnap Mail — Demo</title>
+  <style>
+    :root {
+      --primary: #4285f4;
+      --sidebar-bg: #f5f5f7;
+      --header-bg: #ffffff;
+      --card-bg: #ffffff;
+      --border: #e0e0e0;
+      --text: #333;
+      --text-light: #777;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { background: #f0f2f5; display: flex; height: 100vh; overflow: hidden; }
+    
+    /* Sidebar */
+    .sidebar {
+      width: 260px; background: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+    .logo {
+      padding: 20px 16px; font-size: 24px; font-weight: bold; color: var(--primary); display: flex; align-items: center; }
+    .logo-icon { font-size: 28px; margin-right: 10px; }
+    .nav { padding: 0 8px; }
+    .nav-item {
+      display: flex; align-items: center; padding: 12px 16px; border-radius: 8px; margin: 4px 0; cursor: pointer; color: var(--text); }
+    .nav-item:hover, .nav-item.active {
+      background: #e8f0fe; color: var(--primary); font-weight: 500; }
+    .nav-icon { margin-right: 12px; font-size: 20px; }
+    
+    /* Main */
+    .main { flex: 1; display: flex; flex-direction: column; }
+    .header {
+      height: 60px; background: var(--header-bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; justify-content: space-between; }
+    .search { flex: 1; max-width: 500px; margin: 0 20px; position: relative; }
+    .search input {
+      width: 100%; padding: 10px 16px 10px 40px; border: 1px solid var(--border); border-radius: 20px; background: #f1f3f4; }
+    .search-icon { position: absolute; left: 14px; top: 12px; color: var(--text-light); }
+    .header-actions { display: flex; gap: 16px; }
+    .btn { background: var(--primary); color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-weight: 500; }
+    .btn-compose { display: flex; align-items: center; gap: 6px; }
+    
+    /* Content */
+    .content { flex: 1; display: flex; overflow: hidden; }
+    
+    /* Email List */
+    .email-list { width: 400px; border-right: 1px solid var(--border); overflow-y: auto; background: var(--card-bg); }
+    .email-header { padding: 16px 20px; font-weight: 500; color: var(--text); border-bottom: 1px solid var(--border); }
+    .email-item {
+      padding: 14px 20px; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .email-item:hover { background: #f8f9fa; }
+    .email-item.unread { background: #f1f3f4; }
+    .email-from { font-weight: 600; margin-bottom: 4px; }
+    .email-subject { font-weight: 500; margin-bottom: 4px; color: var(--text); }
+    .email-preview { color: var(--text-light); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .email-time { float: right; font-size: 12px; color: var(--text-light); }
+    
+    /* Email View */
+    .email-view { flex: 1; padding: 20px; overflow-y: auto; background: var(--card-bg); display: none; flex-direction: column; }
+    .email-header-view {
+      margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .email-from-view { font-size: 18px; font-weight: 600; }
+    .email-to-view { color: var(--text-light); margin: 4px 0; }
+    .email-date-view { color: var(--text-light); font-size: 13px; }
+    .email-body-view { line-height: 1.6; color: var(--text); }
+    
+    /* Compose Modal */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; }
+    .modal-content {
+      background: white; margin: 5% auto; width: 90%; max-width: 700px; border-radius: 8px; overflow: hidden; }
+    .modal-header {
+      padding: 16px 20px; background: var(--primary); color: white; display: flex; justify-content: space-between; align-items: center; }
+    .modal-body { padding: 20px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 500; }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 4px; font-size: 15px; }
+    .form-group textarea { min-height: 150px; resize: vertical; }
+    .modal-footer { padding: 16px 20px; text-align: right; border-top: 1px solid var(--border); }
+    
+    /* Login / Signup */
+    .auth { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; background: #e8eaed; }
+    .auth-box { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+    .auth h2 { margin-bottom: 24px; text-align: center; }
+    .auth input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid var(--border); border-radius: 4px; font-size: 16px; }
+    .auth button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 16px; }
+    .switch { text-align: center; margin-top: 16px; color: var(--text-light); }
+    .switch a { color: var(--primary); cursor: pointer; text-decoration: none; }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar { width: 70px; }
+      .logo span, .nav-text { display: none; }
+      .nav-icon { margin-right: 0; }
+      .email-list { width: 100%; }
+      .email-view { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Auth Screen (default) -->
+  <div id="authScreen" class="auth">
+    <div class="auth-box">
+      <h2>🔐 AirSnap Mail</h2>
+      <div id="loginForm">
+        <input type="email" id="loginEmail" placeholder="Email (e.g. skyrra@airsnap.art)" value="skyrra@airsnap.art" />
+        <input type="password" id="loginPass" placeholder="Password" value="demo123" />
+        <button onclick="login()">Sign In</button>
+        <div class="switch">Don’t have an account? <a onclick="showSignup()">Create one</a></div>
+      </div>
+      <div id="signupForm" style="display:none;">
+        <input type="text" id="signupName" placeholder="Full Name" value="Skyrra" />
+        <input type="email" id="signupEmail" placeholder="Email (e.g. you@airsnap.art)" value="contact@airsnap.art" />
+        <input type="password" id="signupPass" placeholder="Password" value="demo123" />
+        <button onclick="signup()">Create Account</button>
+        <div class="switch">Already have an account? <a onclick="showLogin()">Sign In</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App (hidden until login) -->
+  <div id="app" style="display:none; height:100%;">
+    <div class="sidebar">
+      <div class="logo"><span class="logo-icon">✉️</span> <span>AirSnap</span></div>
+      <div class="nav">
+        <div class="nav-item active"><span class="nav-icon">📥</span> <span class="nav-text">Inbox</span></div>
+        <div class="nav-item"><span class="nav-icon">📤</span> <span class="nav-text">Sent</span></div>
+        <div class="nav-item"><span class="nav-icon">📁</span> <span class="nav-text">Drafts</span></div>
+        <div class="nav-item"><span class="nav-icon">🏷️</span> <span class="nav-text">Tags</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="header">
+        <div class="search">
+          <span class="search-icon">🔍</span>
+          <input type="text" placeholder="Search mail…" />
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-compose" onclick="openCompose()"><span>➕</span> Compose</button>
+        </div>
+      </div>
+      <div class="content">
+        <div class="email-list">
+          <div class="email-header">Inbox • 3 unread</div>
+          <div class="email-item unread" onclick="openEmail(0)">
+            <div class="email-from">Brevo Team</div>
+            <div class="email-subject">✅ Your domain is verified!</div>
+            <div class="email-preview">Great! Your domain airsnap.art is now authenticated. You can send emails...</div>
+            <div class="email-time">10:23 AM</div>
+          </div>
+          <div class="email-item" onclick="openEmail(1)">
+            <div class="email-from">Cloudflare</div>
+            <div class="email-subject">📧 Email Routing activated</div>
+            <div class="email-preview">You’ve enabled Email Routing for airsnap.art. Emails to contact@airsnap.art will...</div>
+            <div class="email-time">Yesterday</div>
+          </div>
+          <div class="email-item unread" onclick="openEmail(2)">
+            <div class="email-from">GitHub</div>
+            <div class="email-subject">[AirSnap] New pull request</div>
+            <div class="email-preview">tarmacq wants to merge 3 commits into main from feature/email-ui</div>
+            <div class="email-time">Mon</div>
+          </div>
+          <div class="email-item" onclick="openEmail(3)">
+            <div class="email-from">Instagram</div>
+            <div class="email-subject">Someone liked your photo</div>
+            <div class="email-preview">@septsixdeux liked your recent post 📸</div>
+            <div class="email-time">Jun 12</div>
+          </div>
+        </div>
+        <div id="emailView" class="email-view">
+          <div class="email-header-view">
+            <div class="email-from-view" id="emailFromView">Brevo Team</div>
+            <div class="email-to-view">to me <<span id="userEmail">skyrra@airsnap.art</span>></div>
+            <div class="email-date-view" id="emailDateView">Fri, Nov 21, 2025 at 10:23 AM</div>
+          </div>
+          <div class="email-body-view" id="emailBodyView">
+            Hi Skyrra,<br><br>
+            ✅ Congratulations! Your domain <strong>airsnap.art</strong> is now verified and ready to send emails via Brevo.<br><br>
+            You’ve successfully configured:<br>
+            • SPF record<br>
+            • DKIM signature<br>
+            • DMARC policy (optional)<br><br>
+            You can now send up to <strong>300 emails/day</strong> for free.<br><br>
+            Next steps:<br>
+            - Integrate Brevo SMTP in your app<br>
+            - Set up email templates<br>
+            - Monitor delivery in dashboard<br><br>
+            Happy emailing!<br>
+            <strong>— The Brevo Team</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compose Modal -->
+  <div id="composeModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>New Message</h3>
+        <span onclick="closeCompose()" style="cursor:pointer; font-size:24px;">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>To</label>
+          <input type="email" id="composeTo" placeholder="recipient@example.com" />
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <input type="text" id="composeSubject" placeholder="Subject" />
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea id="composeBody" placeholder="Hi there, ...">Hi there,
+
+This is a demo email sent from AirSnap Mail!
+
+— Skyrra
+Founder, AirSnap</textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="sendEmail()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Mock data
+    const emails = [
+      {
+        from: "Brevo Team",
+        to: "skyrra@airsnap.art",
+        subject: "✅ Your domain is verified!",
+        body: `Hi Skyrra,<br><br>
+✅ Congratulations! Your domain <strong>airsnap.art</strong> is now verified and ready to send emails via Brevo.<br><br>
+You’ve successfully configured:<br>
+• SPF record<br>
+• DKIM signature<br>
+• DMARC policy (optional)<br><br>
+You can now send up to <strong>300 emails/day</strong> for free.<br><br>
+Next steps:<br>
+- Integrate Brevo SMTP in your app<br>
+- Set up email templates<br>
+- Monitor delivery in dashboard<br><br>
+Happy emailing!<br>
+<strong>— The Brevo Team</strong>`,
+        time: "Fri, Nov 21, 2025 at 10:23 AM"
+      },
+      {
+        from: "Cloudflare",
+        to: "skyrra@airsnap.art",
+        subject: "📧 Email Routing activated",
+        body: `Hello,<br><br>
+You’ve successfully enabled Email Routing for <strong>airsnap.art</strong>.<br><br>
+📧 Emails sent to <code>contact@airsnap.art</code> will now be forwarded to your Gmail inbox.<br><br>
+No mail server needed — just DNS.<br><br>
+Thanks for using Cloudflare!<br>
+— Cloudflare Team`,
+        time: "Thu, Nov 20, 2025 at 3:45 PM"
+      },
+      {
+        from: "GitHub",
+        to: "skyrra@airsnap.art",
+        subject: "[AirSnap] New pull request",
+        body: `<strong>tarmacq</strong> wants to merge 3 commits into <code>main</code> from <code>feature/email-ui</code><br><br>
+✅ Added Brevo SMTP integration<br>
+✅ Built HTML email client prototype<br>
+✅ Tested with real SMTP key<br><br>
+Review at: <a href="#">github.com/airsnap/email/pull/42</a>`,
+        time: "Mon, Nov 18, 2025 at 9:15 AM"
+      },
+      {
+        from: "Instagram",
+        to: "skyrra@airsnap.art",
+        subject: "Someone liked your photo",
+        body: `@septsixdeux liked your recent post 📸<br><br>
+You can view it here: <a href="#">instagram.com/p/XYZ</a>`,
+        time: "Wed, Jun 12, 2025 at 7:22 PM"
+      }
+    ];
+
+    let currentUser = null;
+
+    function showLogin() {
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('signupForm').style.display = 'none';
+    }
+
+    function showSignup() {
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('signupForm').style.display = 'block';
+    }
+
+    function login() {
+      const email = document.getElementById('loginEmail').value;
+      if (email && email.includes('@')) {
+        currentUser = email;
+        document.getElementById('userEmail').textContent = email;
+        document.getElementById('authScreen').style.display = 'none';
+        document.getElementById('app').style.display = 'flex';
+      } else {
+        alert('Please enter a valid email.');
+      }
+    }
+
+    function signup() {
+      const name = document.getElementById('signupName').value;
+      const email = document.getElementById('signupEmail').value;
+      if (name && email && email.includes('@')) {
+        alert(`✅ Account created for ${name} (${email})!\n\n(Demo only — no real account saved)`);
+        document.getElementById('loginEmail').value = email;
+        showLogin();
+      } else {
+        alert('Please fill all fields with a valid email.');
+      }
+    }
+
+    function openEmail(index) {
+      const email = emails[index];
+      document.getElementById('emailFromView').textContent = email.from;
+      document.getElementById('emailDateView').textContent = email.time;
+      document.getElementById('emailBodyView').innerHTML = email.body;
+      document.querySelector('.email-view').style.display = 'flex';
+      
+      // Hide list on mobile
+      if (window.innerWidth < 768) {
+        document.querySelector('.email-list').style.display = 'none';
+      }
+    }
+
+    function openCompose() {
+      document.getElementById('composeModal').style.display = 'block';
+    }
+
+    function closeCompose() {
+      document.getElementById('composeModal').style.display = 'none';
+    }
+
+    function sendEmail() {
+      const to = document.getElementById('composeTo').value;
+      const subject = document.getElementById('composeSubject').value;
+      if (!to || !subject) {
+        alert('Please fill "To" and "Subject".');
+        return;
+      }
+      alert(`✅ Email sent to ${to}!\n\nIn a real app, this would use your Brevo SMTP key:\n\nxsmtpsib-...\n\nBut this is a demo — no real email sent.`);
+      closeCompose();
+    }
+
+    // Close modal on outside click
+    window.onclick = function(event) {
+      const modal = document.getElementById('composeModal');
+      if (event.target === modal) closeCompose();
+    };
+
+    // Auto-login for demo
+    setTimeout(() => {
+      document.getElementById('loginEmail').value = 'skyrra@airsnap.art';
+      login();
+    }, 500);
+  </script>
+</body>
+</html>
