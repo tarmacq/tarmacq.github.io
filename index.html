@@ -1,691 +1,601 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="tarmacq">
-    <meta property="og:description" content="Hi, I'm tarmacq.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.tarmacq.com">
-    <meta property="og:image" content="https://ik.imagekit.io/hswtnwf8i/Untitled%20(37).png?updatedAt=1763118080646">
-    <meta property="og:site_name" content="tarmacq">
     <title>tarmacq</title>
-    
-    <!-- Core Tools: Tailwind CSS and Inter Font -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="https://ik.imagekit.io/hswtnwf8i/Untitled%20(37).png?updatedAt=1763118080646" type="image/png" />
-    
-    <!-- External Libraries Loaded Globally -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- RGBELoader is often attached to the THREE namespace after loading -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="https://www.tarmacq.com/favicon.ico">
 
-    
-    <!-- --- INLINE CSS STYLES --- -->
     <style>
-        /* --- Liquid Gradient Background --- */
+        :root {
+            --bg-dark: #050511;
+            --purple-glow: #5b2fa6;
+            --warm-glow: #ffcf96;
+            --text-white: #ffffff;
+            --text-gray: #a1a1aa;
+            --card-glass: rgba(255, 255, 255, 0.05);
+            --accent-blue: #3b82f6;
+            --accent-pink: #ec4899;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(120deg, #0a0a0a, #4f46e5, #ec4899, #1a1a2e);
-            background-size: 400% 400%;
-            animation: liquid-gradient 20s ease infinite;
-            color: #e0e0e0;
-            overflow-x: hidden;
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            width: 100%;
+            overflow-x: hidden; /* Changed from hidden to allow scrolling */
+            position: relative;
         }
 
-        @keyframes liquid-gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* --- Glassmorphism Card Style --- */
-        .glass-card {
-            background: rgba(26, 26, 46, 0.4);
-            backdrop-filter: blur(12px) saturate(150%);
-            -webkit-backdrop-filter: blur(12px) saturate(150%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .glass-card:hover {
-            box-shadow: 0 0 25px rgba(79, 70, 229, 0.5);
-            transform: translateY(-5px);
-        }
-
-        /* --- Header Glassmorphism --- */
-        header.sticky {
-            background: rgba(10, 10, 10, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        /* --- Simple Static Image Loader --- */
-        #loader { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: radial-gradient(circle, #1e1e2f, #0a0a0a); 
-            display: flex; justify-content: center; align-items: center; 
-            z-index: 1000; transition: opacity 0.8s ease-out; 
-        }
-        /* Loader Circle styling remains, now housing the image */
-        .loader {
-            width: 120px; /* Slightly larger container */
-            height: 120px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            background: #4f46e5;
-            box-shadow: 0 0 40px rgba(79, 70, 229, 0.7);
-        }
-        .loader img {
-            border-radius: 50%;
-            object-fit: cover;
-            /* Ensures the image itself is centered and fits nicely */
-        }
-
-
-        /* --- 3D Skill Card Tilt Effect --- */
-        .skill-card-tilt {
-            transform-style: preserve-3d;
-            transition: transform 0.1s ease-out;
-        }
-        .skill-card-tilt:hover {
-            box-shadow: 0 0 30px rgba(79, 70, 229, 0.7);
-        }
-        
-        /* --- 3D Hero Canvas --- */
-        #hero-canvas {
-            position: absolute;
+        /* --- Complex Background Gradient (Fixed to cover scroll) --- */
+        .background-gradient {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 5;
-            opacity: 0.8;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(255, 208, 150, 0.4) 0%, rgba(91, 47, 166, 0.1) 40%, transparent 60%),
+                radial-gradient(circle at 80% 50%, rgba(76, 29, 149, 0.4) 0%, transparent 60%),
+                linear-gradient(135deg, #1e1b4b 0%, #020617 100%);
+            filter: blur(20px);
         }
 
-        /* Utility Styles */
-        .text-accent { color: #6366f1; }
-        .section-heading {
+        /* --- Layout --- */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 3rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        section {
+            padding: 6rem 0;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0 2rem 0;
             position: relative;
-            display: inline-block;
-            padding-bottom: 12px;
-            margin-bottom: 50px;
-            font-size: 2.5rem;
-            letter-spacing: 1px;
-            background: linear-gradient(90deg, #818cf8, #f472b6);
+            z-index: 50;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .logo img {
+            height: 150px;
+            width: auto;
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-social {
+            color: white;
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+        .btn-social:hover { transform: scale(1.2); color: var(--accent-pink); }
+
+        .btn-join {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(91, 47, 166, 0.5);
+            transition: all 0.3s;
+        }
+
+        .btn-join:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 25px rgba(91, 47, 166, 0.8);
+        }
+
+        /* --- Hero Section --- */
+        .hero-section {
+            min-height: 85vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            padding-bottom: 4rem;
+        }
+
+        /* Left Column */
+        .hero-text {
+            max-width: 650px;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -1px;
+            background: linear-gradient(90deg, #fff, #a1a1aa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .section-heading::after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            bottom: 0;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, #818cf8, #f472b6);
-            border-radius: 9999px;
-            box-shadow: 0 0 10px rgba(129, 140, 248, 0.5);
-        }
-        .timeline-item { position: relative; padding-left: 40px; transition: all 0.3s ease; }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 8px;
-            width: 16px;
-            height: 16px;
-            background: linear-gradient(90deg, #818cf8, #f472b6);
-            border-radius: 50%;
-            border: 3px solid #1a1a2e;
-            box-shadow: 0 0 15px rgba(129, 140, 248, 0.7);
-        }
-        .timeline-item:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            left: 7px;
-            top: 24px;
-            width: 2px;
-            height: calc(100% - 24px);
-            background: linear-gradient(to bottom, #818cf8, #f472b6);
-            opacity: 0.5;
+        
+        .hero-desc {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+            max-width: 90%;
         }
 
-        /* Animations for content appearance */
-        .animate-fade-in { animation: fadeIn 1.5s ease-in-out; }
-        .animate-slide-up { animation: slideUp 1s ease-out; }
-        .animate-slide-up-delay { animation: slideUp 1s ease-out 0.4s forwards; opacity: 0; }
-        .animate-slide-up-delay-2 { animation: slideUp 1s ease-out 0.8s forwards; opacity: 0; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .highlight { color: var(--accent-pink); font-weight: 600; }
+
+        .cta-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .btn-start {
+            background: linear-gradient(90deg, #504f67, #ec4899);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
+            transition: transform 0.3s;
+        }
+        
+        .btn-start:hover { transform: scale(1.05); }
+
+        .cursor-tag {
+            position: absolute;
+            bottom: -35px;
+            right: -40px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .cursor-pointer {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 15px solid #a855f7;
+            transform: rotate(-30deg);
+        }
+
+        .cursor-label {
+            background: #a855f7;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Tech Stack / Partners */
+        .partners {
+            margin-top: 5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            opacity: 0.7;
+            align-items: center;
+        }
+
+        .partner-logo {
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Right Column (Orbit) */
+        .orbit-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Rings */
+        .ring {
+            position: absolute;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 30px rgba(91, 47, 166, 0.1);
+        }
+
+        .ring-1 { width: 250px; height: 250px; }
+        .ring-2 { width: 450px; height: 450px; }
+        .ring-3 { width: 650px; height: 650px; opacity: 0.3; }
+
+        /* Center Content */
+        .orbit-center {
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .orbit-center img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid var(--purple-glow);
+            box-shadow: 0 0 30px rgba(91, 47, 166, 0.6);
+            margin-bottom: 10px;
+        }
+
+        .orbit-center h2 { font-size: 2rem; font-weight: 600; }
+        .orbit-center p { font-size: 0.9rem; opacity: 0.8; color: var(--accent-pink); }
+
+        /* Floating Items */
+        .floater {
+            position: absolute;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s;
+            background: #000;
+        }
+        .floater:hover { transform: scale(1.2); z-index: 20; }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Specific styles for icons */
+        .icon-html { color: #e34c26; box-shadow: 0 0 15px rgba(227, 76, 38, 0.4); }
+        .icon-css { color: #264de4; box-shadow: 0 0 15px rgba(38, 77, 228, 0.4); }
+        .icon-js { color: #f7df1e; box-shadow: 0 0 15px rgba(247, 223, 30, 0.4); }
+        .icon-python { color: #306998; box-shadow: 0 0 15px rgba(48, 105, 152, 0.4); }
+
+        /* Positions */
+        .pos-1 { top: 38%; left: 35%; transform: translate(-50%, -50%); }
+        .pos-2 { bottom: 35%; right: 35%; transform: translate(50%, 50%); }
+        .pos-3 { bottom: 25%; left: 42%; transform: translate(-50%, 50%); }
+        .pos-4 { top: 25%; left: 22%; transform: translate(-50%, -50%); }
+        .pos-5 { top: 15%; right: 28%; transform: translate(50%, -50%); }
+        .pos-6 { bottom: 15%; right: 30%; transform: translate(50%, 50%); }
+        .pos-7 { top: 40%; right: 10%; transform: translate(50%, -50%); }
+        .pos-8 { top: 50%; right: 0%; transform: translate(100%, -50%); }
+
+        /* --- Generic Section Styling --- */
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .section-header .line {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #4f46e5, #ec4899);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        /* --- Grid & Cards --- */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .glass-card {
+            background: var(--card-glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Project Cards */
+        .project-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+        .project-title { font-size: 1.5rem; margin-bottom: 0.5rem; color: white; }
+        .project-desc { color: var(--text-gray); font-size: 0.95rem; margin-bottom: 1.5rem; }
+        .btn-link { color: var(--accent-pink); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+        .btn-link:hover { text-decoration: underline; }
+
+        /* Service Cards */
+        .service-icon {
+            font-size: 2rem;
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem 0;
+            text-align: center;
+            color: var(--text-gray);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 1100px) {
+            h1 { font-size: 3rem; }
+            .hero-section { grid-template-columns: 1fr; text-align: center; padding-top: 4rem; }
+            .hero-text { max-width: 100%; margin-bottom: 4rem; display: flex; flex-direction: column; align-items: center; }
+            .ring-3 { display: none; }
+            .orbit-container { transform: scale(0.9); height: 500px; }
+            .partners { justify-content: center; }
+        }
     </style>
 </head>
-<body class="antialiased">
 
-    <!-- LOADER BLOCK -->
-    <div id="loader">
-        <div class="loader">
-            <!-- Using the user-provided image URL for the static logo placeholder -->
-            <img src="https://ik.imagekit.io/hswtnwf8i/Untitled.png"
-                 alt="tarmacq logo" 
-                 class="w-24 h-24 rounded-full" />
-        </div>
-    </div>
+<body>
 
-    <!-- Header Section -->
-    <header id="main-header" class="text-white shadow-2xl sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="#" class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-500">tarmacq</a>
-            <nav class="hidden md:flex space-x-10">
-                <a href="#about" class="hover:text-accent transition-colors duration-300">About</a>
-                <a href="#services" class="hover:text-accent transition-colors duration-300">Services</a>
-                <a href="#skills" class="hover:text-accent transition-colors duration-300">Skills</a>
-                <a href="#projects" class="hover:text-accent transition-colors duration-300">Projects</a>
-                <a href="#contact" class="hover:text-accent transition-colors duration-300">Contact</a>
-            </nav>
-            <button id="mobile-menu-btn" class="md:hidden focus:outline-none">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
-        </div>
-    </header>
+    <div class="background-gradient"></div>
 
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="fixed top-0 left-0 w-full h-full bg-gray-900 text-white z-40 transform -translate-y-full transition-transform duration-500 ease-in-out md:hidden">
-        <div class="p-6 text-right">
-            <button id="close-mobile-menu-btn" class="focus:outline-none">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-        </div>
-        <nav class="flex flex-col items-center space-y-10 mt-20 text-3xl">
-            <a href="#about" class="hover:text-accent transition-colors duration-300" onclick="closeMenu()">About</a>
-            <a href="#services" class="hover:text-accent transition-colors duration-300" onclick="closeMenu()">Services</a>
-            <a href="#skills" class="hover:text-accent transition-colors duration-300" onclick="closeMenu()">Skills</a>
-            <a href="#projects" class="hover:text-accent transition-colors duration-300" onclick="closeMenu()">Projects</a>
-            <a href="#contact" class="hover:text-accent transition-colors duration-300" onclick="closeMenu()">Contact</a>
+    <div class="container">
+        <nav>
+            <a href="#" class="logo">
+                <img src="https://www.tarmacq.com/Untitled%20(12).png" alt="tarmacq">
+            
+            </a>
+            <div class="nav-links hidden-mobile">
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#projects">Projects</a>
+                <a href="#reviews">Reviews</a>
+            </div>
+            <div class="nav-actions">
+                <a href="https://instagram.com/tarmacq" class="btn-social"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://discord.com/users/1129726655569600602" class="btn-social"><i class="fa-brands fa-discord"></i></a>
+                <a href="mailto:ryanyagouni@gmail.com" class="btn-join">Contact Me</a>
+            </div>
         </nav>
+
+        <section class="hero-section">
+            <div class="hero-text">
+                <h1>Hi, I'm tarmacq.</h1>
+                
+                <p class="hero-desc">
+                    A passionate <span class="highlight">Web Developer</span> and <span class="highlight">UI/UX Designer</span> creating immersive, high-performance websites and applications.
+                </p>
+
+                <div class="cta-container">
+                    <a href="#projects" class="btn-start">Explore My Work <i class="fa-solid fa-arrow-right"></i></a>
+                    <div class="cursor-tag">
+                        <div class="cursor-pointer"></div>
+                        <div class="cursor-label">Open for work</div>
+                    </div>
+                </div>
+
+                <div class="partners">
+                    <div class="partner-logo"><i class="fa-brands fa-html5"></i> HTML5</div>
+                    <div class="partner-logo"><i class="fa-brands fa-js"></i> JavaScript</div>
+                    <div class="partner-logo"><i class="fa-brands fa-python"></i> Python</div>
+                    <div class="partner-logo"><i class="fa-brands fa-git-alt"></i> Git</div>
+                </div>
+            </section>
+
+            <div class="orbit-container">
+                <div class="ring ring-1"></div>
+                <div class="ring ring-2"></div>
+                <div class="ring ring-3"></div>
+
+                <div class="orbit-center">
+                    <img src="https://www.tarmacq.com/Untitled%20(10).png" alt="Profile">
+                    
+                    <p>The tarmacq</p>
+                    <h2>Universe</h2>
+                </div>
+
+                <div class="floater icon-box icon-html pos-1" title="HTML">
+                    <i class="fa-brands fa-html5"></i>
+                </div>
+
+                <div class="floater icon-box icon-css pos-2" title="CSS">
+                    <i class="fa-brands fa-css3-alt"></i>
+                </div>
+
+                <div class="floater avatar pos-3" title="Gamer1320 (Qatar VA)">
+                    <img src="https://jsali-lvrgt.github.io/jsali_lvrgt.png" alt="Client 1">
+                </div>
+
+                <div class="floater avatar pos-4" title="Ilhan (Air Europa)">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/ronnieliang-pilot.png_ex=68cfffad&is=68ceae2d&hm=8e201ec1ef5872f4dbf8b6eb7cfa60b1da5698cb55d9c182f59b6bc4be15f8b9&?updatedAt=1758375514676" alt="Client 2">
+                </div>
+
+                <div class="floater avatar pos-5" title="camping_n (Iberia VA)">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/8250fecdc62c4e42a693196f2179f18f.webp_size=1024?updatedAt=1758378502069" alt="Client 3">
+                </div>
+
+                <div class="floater icon-box icon-js pos-6" title="JavaScript">
+                    <i class="fa-brands fa-js"></i>
+                </div>
+
+                <div class="floater icon-box icon-python pos-7" title="Python">
+                    <i class="fa-brands fa-python"></i>
+                </div>
+
+                <div class="floater icon-box pos-8" title="Git" style="color: #f1502f;">
+                    <i class="fa-brands fa-git-alt"></i>
+                </div>
+            </div>
+        </section>
+
+        <section id="services">
+            <div class="section-header">
+                <h2>Services</h2>
+                <div class="line"></div>
+            </div>
+            <div class="grid-3">
+                <div class="glass-card">
+                    <div class="service-icon"><i class="fa-solid fa-code"></i></div>
+                    <h3>Web Development</h3>
+                    <p style="color:var(--text-gray); margin-top:10px;">Crafting responsive, performant websites and apps from concept to deployment.</p>
+                </div>
+                <div class="glass-card">
+                    <div class="service-icon"><i class="fa-solid fa-pen-nib"></i></div>
+                    <h3>UI/UX Design</h3>
+                    <p style="color:var(--text-gray); margin-top:10px;">Designing intuitive interfaces that prioritize user engagement and satisfaction.</p>
+                </div>
+                <div class="glass-card">
+                    <div class="service-icon"><i class="fa-solid fa-terminal"></i></div>
+                    <h3>Technical Consulting</h3>
+                    <p style="color:var(--text-gray); margin-top:10px;">Expert advice on tech stacks, optimization, and strategic project execution.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="section-header">
+                <h2>Featured Projects</h2>
+                <div class="line"></div>
+            </div>
+            <div class="grid-3">
+                <div class="glass-card">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/554b28d7bef840bea458134d767f2254-oneworld-sky-flipper.jpg?updatedAt=1753266279065" alt="oneworld" class="project-img">
+                    <h3 class="project-title">oneworld virtual PF</h3>
+                    <p class="project-desc">Founder/CEO of oneworld virtual PF, a Virtual Alliance in Project Flight.</p>
+                    <a href="https://oneworldvirtual.gitub.io/main/" class="btn-link">View Project <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="glass-card">
+                    <img src="https://jsali-lvrgt.github.io/jsali_lvrgt.png" alt="jsali" class="project-img">
+                    <h3 class="project-title">jsali_lvrgt</h3>
+                    <p class="project-desc">A scientific journey; click below to learn more.</p>
+                    <a href="https://jsali.tarmacq.com" class="btn-link">View Project <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="glass-card">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/t-5%20(3).png?updatedAt=1760297175190" alt="studios" class="project-img">
+                    <h3 class="project-title">tarmacq studios</h3>
+                    <p class="project-desc">The official web service from tarmacq to the client.</p>
+                    <a href="https://instagram.com/tarmacq_studios" class="btn-link">View Project <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <section id="reviews">
+            <div class="section-header">
+                <h2>Client Reviews</h2>
+                <div class="line"></div>
+            </div>
+            <div class="grid-3">
+                <div class="glass-card" style="display:flex; align-items:center; gap:15px;">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/c9ec2ac42f8e0b4d302cfd7b174fb921.webp_size=1024?updatedAt=1758375404749" style="width:50px; height:50px; border-radius:50%;" alt="Gamer1320">
+                    <div>
+                        <p style="font-style:italic; font-size:0.9rem;">"tarmacq has always been amazing at coding..."</p>
+                        <h4 style="margin-top:5px; color:var(--accent-blue);">Gamer1320</h4>
+                    </div>
+                </div>
+                <div class="glass-card" style="display:flex; align-items:center; gap:15px;">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/ronnieliang-pilot.png_ex=68cfffad&is=68ceae2d&hm=8e201ec1ef5872f4dbf8b6eb7cfa60b1da5698cb55d9c182f59b6bc4be15f8b9&?updatedAt=1758375514676" style="width:50px; height:50px; border-radius:50%;" alt="Ilhan">
+                    <div>
+                        <p style="font-style:italic; font-size:0.9rem;">"tarmacq is honestly one of the best devs I know..."</p>
+                        <h4 style="margin-top:5px; color:var(--accent-blue);">Ilhan</h4>
+                    </div>
+                </div>
+                <div class="glass-card" style="display:flex; align-items:center; gap:15px;">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/8250fecdc62c4e42a693196f2179f18f.webp_size=1024?updatedAt=1758378502069" style="width:50px; height:50px; border-radius:50%;" alt="camping_n">
+                    <div>
+                        <p style="font-style:italic; font-size:0.9rem;">"tarmacq is a very active and passionate dev..."</p>
+                        <h4 style="margin-top:5px; color:var(--accent-blue);">camping_n</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2025 tarmacq. All Rights Reserved. | <a href="https://www.tarmacq.com/pp" style="color:inherit;">Privacy Policy</a> | <a href="https://www.tarmacq.com/terms" style="color:inherit;">Terms of use</a></p>
+        </footer>
+
     </div>
-
-    <!-- Hero Section with 3D Liquid Plane -->
-    <section id="hero" class="relative py-32 text-center overflow-hidden min-h-screen flex items-center justify-center">
-        <!-- 3D Canvas -->
-        <canvas id="hero-canvas"></canvas>
-        <div class="container mx-auto px-4 relative z-10">
-            <img class="w-48 h-48 rounded-full mx-auto mb-10 border-4 border-indigo-500 shadow-2xl animate-fade-in hover:rotate-6 transition-transform duration-500" src="https://ik.imagekit.io/hswtnwf8i/Untitled.png" alt="tarmacq Profile Picture" />
-            <h1 data-speed="0.9" class="parallax-el text-5xl sm:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-pink-400 mb-6 animate-slide-up">Hi, I'm tarmacq.</h1>
-            <p data-speed="0.95" class="parallax-el text-xl text-gray-200 max-w-4xl mx-auto mb-10 animate-slide-up-delay">
-                A passionate <span class="text-accent font-semibold">Web Developer</span> and <span class="text-accent font-semibold">UI/UX Designer</span> crafting immersive, high-performance digital experiences.
-            </p>
-            <a href="#projects" class="inline-block bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-medium py-4 px-10 rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:scale-110 animate-slide-up-delay-2">
-                Explore My Work
-            </a>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-24 relative overflow-hidden">
-        <div class="container mx-auto px-4 relative z-10">
-            <h2 data-speed="0.9" class="parallax-el section-heading text-center">About tarmacq</h2>
-            <div class="flex flex-col md:flex-row items-center md:space-x-16">
-                <div data-speed="1" class="parallax-el md:w-1/2 mb-10 md:mb-0 animate-slide-up">
-                    <p class="text-gray-300 mb-6 leading-relaxed text-lg">
-                        As a Web Developer, I'm driven by the art of blending innovative design with robust code. My journey started with a spark of curiosity about digital creation, evolving into a profession where I build scalable, user-centric solutions.
-                    </p>
-                    <p class="text-gray-300 leading-relaxed text-lg">
-                        Proficient in HTML, CSS, JavaScript, Python, Discord.JS, and Git, I thrive on merging aesthetics with functionality. Always exploring new tech, I'm ready for the next challenge.
-                    </p>
-                </div>
-                <div data-speed="1.1" class="parallax-el md:w-1/2">
-                    <img src="https://ik.imagekit.io/hswtnwf8i/Untitled%20(37).png?updatedAt=1763118080646" alt="About Me" class="rounded-2xl shadow-2xl transform hover:scale-105 hover:rotate-3 transition-transform duration-500">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services" class="py-24">
-        <div class="container mx-auto px-4">
-            <h2 data-speed="0.9" class="parallax-el section-heading text-center">Services</h2>
-            <div class="grid md:grid-cols-3 gap-10">
-                <div data-speed="1" class="parallax-el glass-card p-10 rounded-2xl shadow-xl">
-                    <h3 class="text-2xl font-semibold text-white mb-4">Web Development</h3>
-                    <p class="text-gray-300">Crafting responsive, performant websites and apps from concept to deployment.</p>
-                </div>
-                <div data-speed="1.05" class="parallax-el glass-card p-10 rounded-2xl shadow-xl">
-                    <h3 class="text-2xl font-semibold text-white mb-4">UI/UX Design</h3>
-                    <p class="text-gray-300">Designing intuitive interfaces that prioritize user engagement and satisfaction.</p>
-                </div>
-                <div data-speed="1.1" class="parallax-el glass-card p-10 rounded-2xl shadow-xl">
-                    <h3 class="text-2xl font-semibold text-white mb-4">Technical Consulting</h3>
-                    <p class="text-gray-300">Expert advice on tech stacks, optimization, and strategic project execution.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section with 3D Tilt -->
-    <section id="skills" class="py-24">
-        <div class="container mx-auto px-4">
-            <h2 data-speed="0.9" class="parallax-el section-heading text-center">My Skills</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-10 text-center">
-                
-                <div style="perspective: 1000px;">
-                    <div class="glass-card skill-card-tilt p-8 rounded-2xl shadow-xl h-32 flex items-center justify-center">
-                        <p class="text-lg font-medium mt-4 text-white">HTML</p>
-                    </div>
-                </div>
-                <div style="perspective: 1000px;">
-                    <div class="glass-card skill-card-tilt p-8 rounded-2xl shadow-xl h-32 flex items-center justify-center">
-                        <p class="text-lg font-medium mt-4 text-white">CSS</p>
-                    </div>
-                </div>
-                <div style="perspective: 1000px;">
-                    <div class="glass-card skill-card-tilt p-8 rounded-2xl shadow-xl h-32 flex items-center justify-center">
-                        <p class="text-lg font-medium mt-4 text-white">JavaScript</p>
-                    </div>
-                </div>
-                <div style="perspective: 1000px;">
-                    <div class="glass-card skill-card-tilt p-8 rounded-2xl shadow-xl h-32 flex items-center justify-center">
-                        <p class="text-lg font-medium mt-4 text-white">Python</p>
-                    </div>
-                </div>
-                <div style="perspective: 1000px;">
-                    <div class="glass-card skill-card-tilt p-8 rounded-2xl shadow-xl h-32 flex items-center justify-center">
-                        <p class="text-lg font-medium mt-4 text-white">Discord.JS</p>
-                    </div>
-                </div>
-                <div style="perspective: 1000px;">
-                    <div class="glass-card skill-card-tilt p-8 rounded-2xl shadow-xl h-32 flex items-center justify-center">
-                        <p class="text-lg font-medium mt-4 text-white">Git</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience" class="py-24">
-        <div class="container mx-auto px-4">
-            <h2 data-speed="0.9" class="parallax-el section-heading text-center">Experience</h2>
-            <div class="max-w-4xl mx-auto space-y-12">
-                <div data-speed="1" class="parallax-el timeline-item glass-card p-6 rounded-lg">
-                    <h3 class="text-2xl font-semibold text-white">Discovered Web Development</h3>
-                    <p class="text-gray-300 text-sm italic">May 2025</p>
-                    <p class="text-gray-300 mt-3">Realized web development's accessibility and potential as a career path.</p>
-                </div>
-                <div data-speed="1.05" class="parallax-el timeline-item glass-card p-6 rounded-lg">
-                    <h3 class="text-2xl font-semibold text-white">Started Building/Offering Services for Virtual Airlines</h3>
-                    <p class="text-gray-300 text-sm italic">June 2025</p>
-                    <p class="text-gray-300 mt-3">Began creating websites and services for Virtual Airlines in the Project Flight community.</p>
-                </div>
-                <div data-speed="1.1" class="parallax-el timeline-item glass-card p-6 rounded-lg">
-                    <h3 class="text-2xl font-semibold text-white">Continuing Growth</h3>
-                    <p class="text-gray-300 text-sm italic">Sept. 2025</p>
-                    <p class="text-gray-300 mt-3">Ongoing learning, skill enhancement, and tackling advanced projects.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="py-24">
-        <div class="container mx-auto px-4 relative z-10">
-            <h2 data-speed="0.9" class="parallax-el section-heading text-center">My Projects</h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
-                <div data-speed="1" class="parallax-el glass-card rounded-2xl shadow-xl overflow-hidden">
-                    <img src="https://ik.imagekit.io/hswtnwf8i/554b28d7bef840bea458134d767f2254-oneworld-sky-flipper.jpg?updatedAt=1753266279065" alt="Project 1" class="w-full h-56 object-cover transform hover:scale-110 transition-transform duration-500">
-                    <div class="p-8">
-                        <h3 class="text-2xl font-semibold text-white mb-3"><strong>one</strong>world virtual PF</h3>
-                        <p class="text-gray-300 mb-5 text-base">
-                            Founder/CEO of <a href="https://oneworldvirtual.gitub.io/main/" class="text-accent hover:underline">oneworld virtual PF</a>, a Virtual Alliance in Project Flight.
-                        </p>
-                        <a href="https://discord.gg/Ac3RqgGbzk" class="inline-block text-accent font-medium hover:underline transition-colors">
-                            View Project &rarr;
-                        </a>
-                    </div>
-                </div>
-                <div data-speed="1.05" class="parallax-el glass-card rounded-2xl shadow-xl overflow-hidden">
-                    <img src="https://jsali-lvrgt.github.io/jsali_lvrgt.png" alt="Project 2" class="w-full h-56 object-cover transform hover:scale-110 transition-transform duration-500">
-                    <div class="p-8">
-                        <h3 class="text-2xl font-semibold text-white mb-3">jsali_lvrgt</h3>
-                        <p class="text-gray-300 mb-5 text-base">
-                            A scientific journey; click below to learn more.
-                        </p>
-                        <a href="https://jsali.tarmacq.com" class="inline-block text-accent font-medium hover:underline transition-colors">
-                            View Project &rarr;
-                        </a>
-                    </div>
-                </div>
-                <div data-speed="1.1" class="parallax-el glass-card rounded-2xl shadow-xl overflow-hidden">
-                    <img src="https://ik.imagekit.io/hswtnwf8i/t-5%20(3).png?updatedAt=1760297175190" alt="Project 3" class="w-full h-56 object-cover transform hover:scale-110 transition-transform duration-500">
-                    <div class="p-8">
-                        <h3 class="text-2xl font-semibold text-white mb-3">tarmacq studios</h3>
-                        <p class="text-gray-300 mb-5 text-base">
-                            The official web service from tarmacq to the client.
-                        </p>
-                        <a href="https://instagram.com/tarmacq_studios" class="inline-block text-accent font-medium hover:underline transition-colors">
-                            View Project &rarr;
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="py-24">
-        <div class="container mx-auto px-4">
-            <h2 data-speed="0.9" class="parallax-el section-heading text-center">Reviews</h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <div data-speed="1" class="parallax-el glass-card p-8 rounded-2xl shadow-xl">
-                    <p class="text-gray-300 mb-6 italic text-base">"tarmacq has always been amazing at coding..."</p>
-                    <div class="flex items-center">
-                        <img class="w-14 h-14 rounded-full mr-4 shadow-md" src="https://ik.imagekit.io/hswtnwf8i/c9ec2ac42f8e0b4d302cfd7b174fb921.webp_size=1024?updatedAt=1758375404749" alt="Client 1">
-                        <div>
-                            <p class="font-semibold text-white"><a href="https://discord.com/users/1134935202091765800/">Gamer1320</a></p>
-                            <p class="text-sm text-gray-400">Founder of <a href="https://discord.gg/TjTGRPq4Rd">ACRV</a> and CEO of Qatar VA</p>
-                        </div>
-                    </div>
-                </div>
-                <div data-speed="1.05" class="parallax-el glass-card p-8 rounded-2xl shadow-xl">
-                    <p class="text-gray-300 mb-6 italic text-base">"tarmacq is honestly one of the best devs I know..."</p>
-                    <div class="flex items-center">
-                        <img class="w-14 h-14 rounded-full mr-4 shadow-md" src="https://ik.imagekit.io/hswtnwf8i/ronnieliang-pilot.png_ex=68cfffad&is=68ceae2d&hm=8e201ec1ef5872f4dbf8b6eb7cfa60b1da5698cb55d9c182f59b6bc4be15f8b9&?updatedAt=1758375514676" alt="Client 2">
-                        <div>
-                            <p class="font-semibold text-white"><a href="https://discord.com/users/841067718110347314">Ilhan</a></p>
-                            <p class="text-sm text-gray-400">Retired Founder of Air europa virtual</p>
-                        </div>
-                    </div>
-                </div>
-                <div data-speed="1.1" class="parallax-el glass-card p-8 rounded-2xl shadow-xl">
-                    <p class="text-gray-300 mb-6 italic text-base">"tarmacq is a very active and passionate developer..."</p>
-                    <div class="flex items-center">
-                        <img class="w-14 h-14 rounded-full mr-4 shadow-md" src="https://ik.imagekit.io/hswtnwf8i/8250fecdc62c4e42a693196f2179f18f.webp_size=1024?updatedAt=1758378502069" alt="Client 3">
-                        <div>
-                            <p class="font-semibold text-white"><a href="https://discord.com/users/862312044657115146">camping_n</a></p>
-                            <p class="text-sm text-gray-400">Founder/Chairman Iberia VA</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Blog Section -->
-    <section id="blog" class="py-24">
-        <div class="container mx-auto px-4">
-            <h2 data-speed="0.9" class="parallax-el section-heading text-center">Latest Work</h2>
-            <div class="grid md:grid-cols-2 gap-10">
-                <div data-speed="1" class="parallax-el glass-card p-8 rounded-2xl shadow-xl flex items-center space-x-6">
-                    <img src="https://ik.imagekit.io/hswtnwf8i/t-2%20(11).png?updatedAt=1760178591570" class="rounded-lg h-28 w-28 object-cover shadow-md">
-                    <div>
-                        <h3 class="text-2xl font-semibold text-white mb-2">tarmacq news</h3>
-                        <p class="text-gray-300 text-base mb-3">One of my best website!</p>
-                        <a href="https://news.tarmacq.com" class="text-accent font-medium hover:underline">Take a Look &rarr;</a>
-                    </div>
-                </div>
-                <div data-speed="1.05" class="parallax-el glass-card p-8 rounded-2xl shadow-xl flex items-center space-x-6">
-                    <img src="https://ik.imagekit.io/hswtnwf8i/t-2%20(12).png?updatedAt=1760191192081" class="rounded-lg h-28 w-28 object-cover shadow-md">
-                    <div>
-                        <h3 class="text-2xl font-semibold text-white mb-2">tarmacq weather</h3>
-                        <p class="text-gray-300 text-base mb-3">one of the unfinished projects you can't see it now.</p>
-                        <a href="https://instagram.com/tarmacq" class="text-accent font-medium hover:underline">Subscribe to my Instagram (its better) &rarr;</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-24">
-        <div class="container mx-auto px-4 text-center">
-            <h2 data-speed="0.9" class="parallax-el section-heading mb-10">Get in Touch</h2>
-            <p data-speed="0.95" class="parallax-el text-gray-300 mb-10 max-w-2xl mx-auto text-lg">
-                Excited for new collaborations? Drop a message for projects, questions, or just a hello.
-            </p>
-            <a href="mailto:ryanyagouni@gmail.com" class="inline-block bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-medium py-4 px-12 rounded-full shadow-2xl hover:shadow-indigo-500/50 transition-all transform hover:scale-105">
-                Send an Email
-            </a>
-            <div class="flex justify-center space-x-8 mt-12">
-                <a href="https://instagram.com/tarmacq" class="text-gray-400 hover:text-accent transition-colors duration-300 transform hover:scale-125">
-                    <img class="w-10 h-10" src="https://static.vecteezy.com/system/resources/previews/018/930/415/non_2x/instagram-logo-instagram-icon-transparent-free-png.png" alt="Instagram">
-                </a>
-                <a href="https://x.com/tarmacq" class="text-gray-400 hover:text-accent transition-colors duration-300 transform hover:scale-125">
-                    <img class="w-10 h-10" src="https://static.vecteezy.com/system/resources/previews/042/148/611/non_2x/new-twitter-x-logo-twitter-icon-x-social-media-icon-free-png.png" alt="X">
-                </a>
-                <a href="https://discord.com/users/1129726655569600602" class="text-gray-400 hover:text-accent transition-colors duration-300 transform hover:scale-125">
-                    <img class="w-10 h-10" src="https://static.vecteezy.com/system/resources/previews/018/930/718/non_2x/discord-logo-discord-icon-transparent-free-png.png" alt="Discord">
-                </a>
-                <a href="https://www.reddit.com/user/tarmacq" class="text-gray-400 hover:text-accent transition-colors duration-300 transform hover:scale-125">
-                    <img class="w-10 h-10" src="https://static.vecteezy.com/system/resources/previews/018/930/474/non_2x/reddit-logo-reddit-icon-transparent-free-png.png" alt="Reddit">
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer Section -->
-    <footer class="text-gray-400 py-10 text-center">
-        <div class="container mx-auto px-4">
-            <p>&copy; 2025 tarmacq. All Rights Reserved.</p>
-            <br>
-            <p><a href="https://tarmacq.github.io/terms">terms</a> | <a href="https://tarmacq.github.io/pp">privacy policy</a></p>
-        </div>
-    </footer>
-
-    <!-- --- INLINE JAVASCRIPT --- -->
-    <script>
-        // Libraries are now globally available: THREE, gsap, ScrollTrigger, RGBELoader
-
-        // --- Global variables for 3D state ---
-        let scene, camera, renderer, orb;
-        let canvas, heroSection;
-        let initialPositions;
-        
-        // --- Setup GSAP & Get DOM elements ---
-        window.onload = function() {
-            // Check if GSAP and Three.js are loaded
-            if (typeof gsap === 'undefined' || typeof THREE === 'undefined') {
-                console.error("GSAP or THREE.js not loaded. Skipping advanced features.");
-                document.getElementById("loader").style.display = "none";
-                return;
-            }
-            
-            gsap.registerPlugin(ScrollTrigger);
-            
-            canvas = document.getElementById('hero-canvas');
-            heroSection = document.getElementById('hero');
-
-            // --- Loader Fade Out ---
-            // Fade out the loader quickly once the entire page is loaded
-            gsap.to("#loader", { 
-                opacity: 0, 
-                duration: 0.8, 
-                delay: 0.3, 
-                onComplete: () => {
-                    document.getElementById("loader").style.display = "none";
-                    // Initialize 3D and other effects after the loader is gone
-                    initHero3D();
-                    initParallax();
-                    initSkillCardTilt();
-                } 
-            });
-        };
-
-
-        // --- Mobile Menu Script ---
-        function closeMenu() {
-            document.getElementById('mobile-menu').classList.add('-translate-y-full');
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const closeMenuBtn = document.getElementById('close-mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const navLinks = document.querySelectorAll('#mobile-menu a');
-
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.remove('-translate-y-full');
-            });
-
-            closeMenuBtn.addEventListener('click', closeMenu);
-            navLinks.forEach(link => link.addEventListener('click', closeMenu));
-        });
-        
-        // --- Interactive 3D Hero Scene (Liquid Plane) ---
-        function initHero3D() {
-            if (!canvas || !heroSection) return;
-
-            scene = new THREE.Scene();
-
-            camera = new THREE.PerspectiveCamera(75, heroSection.clientWidth / heroSection.clientHeight, 0.1, 1000);
-            camera.position.z = 1.5;
-
-            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-            renderer.setSize(heroSection.clientWidth, heroSection.clientHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-
-            const pmremGenerator = new THREE.PMREMGenerator(renderer);
-            pmremGenerator.compileEquirectangularShader();
-            
-            // THREE.RGBELoader is available globally after loading the script
-            new THREE.RGBELoader() 
-                .setDataType(THREE.FloatType)
-                .load('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/neon_photostudio_1k.hdr', (texture) => {
-                    const envMap = pmremGenerator.fromEquirectangular(texture).texture;
-                    scene.environment = envMap;
-                    texture.dispose();
-                    pmremGenerator.dispose();
-                });
-
-            // Plane Geometry (3x3 with high segments for liquid effect)
-            const geometry = new THREE.PlaneGeometry(3, 3, 64, 64);
-            
-            initialPositions = geometry.attributes.position.array.slice(); 
-
-            // Liquid Glass Material 
-            const material = new THREE.MeshPhysicalMaterial({
-                roughness: 0,
-                metalness: 0.5,
-                transmission: 1.0,
-                opacity: 1.0,
-                ior: 1.5,
-                thickness: 0.2, 
-                clearcoat: 1.0,
-                clearcoatRoughness: 0,
-                envMapIntensity: 1.5
-            });
-
-            orb = new THREE.Mesh(geometry, material);
-            scene.add(orb);
-
-            // Lights
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-            scene.add(ambientLight);
-            const pointLight = new THREE.PointLight(0xffffff, 2);
-            pointLight.position.set(5, 5, 5);
-            scene.add(pointLight);
-
-            animateHero3D();
-        }
-
-        function animateHero3D() {
-            if (!renderer) return;
-
-            requestAnimationFrame(animateHero3D);
-
-            const time = performance.now() * 0.001;
-            const positionAttribute = orb.geometry.attributes.position;
-
-            // Vertex displacement for the 'Liquid' effect (Waving Plane)
-            for (let i = 0; i < positionAttribute.count; i++) {
-                const x = initialPositions[i * 3];
-                const y = initialPositions[i * 3 + 1];
-
-                // Creates a complex, evolving sine wave pattern
-                const zOffset = 
-                    0.15 * Math.sin(x * 4 + time * 1.5) + 
-                    0.1 * Math.sin(y * 3 + time * 0.7);
-
-                // Apply Z offset to create the wave/ripple
-                positionAttribute.setZ(i, zOffset);
-            }
-            positionAttribute.needsUpdate = true;
-            
-            // Subtly rotate the plane for a more dynamic look
-            orb.rotation.z = time * 0.03;
-            orb.rotation.y = time * 0.02;
-
-            renderer.render(scene, camera);
-        }
-        
-        // --- Multi-Layer Parallax with GSAP ---
-        function initParallax() {
-            const parallaxElements = document.querySelectorAll('.parallax-el');
-
-            parallaxElements.forEach(el => {
-                const speed = el.dataset.speed || 1.0;
-                // Only initialize if GSAP is loaded
-                if (typeof gsap !== 'undefined') {
-                    gsap.to(el, {
-                        y: (i, target) => -(ScrollTrigger.maxScroll(window) * (1 - parseFloat(speed))) / 5,
-                        ease: 'none',
-                        scrollTrigger: {
-                            trigger: el,
-                            start: 'top bottom',
-                            end: 'bottom top',
-                            scrub: 1.5
-                        }
-                    });
-                }
-            });
-        }
-
-        // --- 3D Skill Card Tilt Effect ---
-        function initSkillCardTilt() {
-            const skillCards = document.querySelectorAll('.skill-card-tilt');
-
-            skillCards.forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    
-                    const midX = rect.width / 2;
-                    const midY = rect.height / 2;
-                    
-                    const rotateX = ((y - midY) / midY) * -7;
-                    const rotateY = ((x - midX) / midX) * 7;
-                    
-                    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
-                });
-                
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
-                });
-            });
-        }
-        
-        // --- Handle Window Resizing ---
-        window.addEventListener('resize', () => {
-            if (camera && renderer && heroSection) {
-                camera.aspect = heroSection.clientWidth / heroSection.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(heroSection.clientWidth, heroSection.clientHeight);
-            }
-        });
-    </script>
-
 </body>
 </html>
