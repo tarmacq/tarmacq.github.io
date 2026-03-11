@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="tarmacq">
+    <meta property="og:description" content="Meet the coolest agency that makes it pop!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.tarmacq.com">
+    <meta property="og:image" content="https://www.tarmacq.com/Untitled (10).png">
+    <meta property="og:site_name" content="tarmacq">
+    <title>tarmacq - the agency</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="fav.png">
+    <link rel="apple-touch-icon" href="https://www.tarmacq.com/fav.png">
+    
+    <style>
+        :root {
+            /* --- NEW PALETTE --- */
+            --bg-dark: #013220;         /* Dark Evergreen */
+            --bg-deep: #001a10;         /* Slightly darker for gradients */
+            --text-main: #D1F2EB;       /* Mint Whisper */
+            --text-muted: #8ebcb3;      /* Dimmed Mint */
+            --accent-primary: #50C878;  /* Emerald Green */
+            --accent-secondary: #0B6E4F; /* Royal Amethyst (Teal/Green) */
+            
+            --card-glass: rgba(11, 110, 79, 0.15); /* Tinted with Secondary */
+            --border-glass: rgba(209, 242, 235, 0.1);
+            --glow-color: rgba(80, 200, 120, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            width: 100%;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- Complex Background Gradient (Redesigned) --- */
+        .background-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 15% 15%, rgba(80, 200, 120, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 85% 60%, rgba(11, 110, 79, 0.25) 0%, transparent 60%),
+                linear-gradient(160deg, var(--bg-dark) 0%, var(--bg-deep) 100%);
+            filter: blur(40px);
+        }
+
+        /* --- Layout --- */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 3rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        section {
+            padding: 6rem 0;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0 2rem 0;
+            position: relative;
+            z-index: 50;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+        
+        .logo img {
+            height: 150px;
+            width: auto;
+            border-radius: 50%;
+            /* Added a subtle green glow to logo */
+            filter: drop-shadow(0 0 5px rgba(80, 200, 120, 0.3));
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-primary);
+            text-shadow: 0 0 10px var(--glow-color);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-social {
+            color: var(--text-main);
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+        .btn-social:hover { transform: scale(1.2); color: var(--accent-primary); }
+
+        .btn-join {
+            background: rgba(80, 200, 120, 0.1);
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            color: var(--text-main);
+            border: 1px solid var(--accent-secondary);
+            box-shadow: 0 0 15px rgba(11, 110, 79, 0.3);
+            transition: all 0.3s;
+        }
+
+        .btn-join:hover {
+            background: rgba(80, 200, 120, 0.2);
+            box-shadow: 0 0 25px rgba(80, 200, 120, 0.5);
+            border-color: var(--accent-primary);
+        }
+
+        /* --- Hero Section --- */
+        .hero-section {
+            min-height: 85vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            padding-bottom: 4rem;
+        }
+
+        /* Left Column */
+        .hero-text {
+            max-width: 650px;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -1px;
+            /* Gradient from Mint to Emerald */
+            background: linear-gradient(90deg, #ffffff, var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-desc {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+            max-width: 90%;
+        }
+
+        .highlight { color: var(--accent-primary); font-weight: 600; }
+
+        .cta-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .btn-start {
+            /* Gradient from Deep Teal to Emerald */
+            background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
+            color: #013220; /* Dark text on bright button for contrast */
+            font-weight: 600;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            box-shadow: 0 0 20px rgba(80, 200, 120, 0.4);
+            transition: transform 0.3s;
+        }
+        
+        .btn-start:hover { transform: scale(1.05); filter: brightness(1.1); }
+        .btn-start i { color: #013220; }
+
+        .cursor-tag {
+            position: absolute;
+            bottom: -35px;
+            right: -40px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .cursor-pointer {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 15px solid var(--accent-primary);
+            transform: rotate(-30deg);
+        }
+
+        .cursor-label {
+            background: var(--accent-primary);
+            color: var(--bg-dark);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* Tech Stack / Partners */
+        .partners {
+            margin-top: 5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            opacity: 0.8;
+            align-items: center;
+        }
+
+        .partner-logo {
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(209, 242, 235, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(209, 242, 235, 0.1);
+            color: var(--text-main);
+        }
+
+        /* Right Column (Orbit) */
+        .orbit-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Rings */
+        .ring {
+            position: absolute;
+            border: 1px solid rgba(80, 200, 120, 0.15);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 30px rgba(11, 110, 79, 0.1);
+        }
+
+        .ring-1 { width: 250px; height: 250px; }
+        .ring-2 { width: 450px; height: 450px; }
+        .ring-3 { width: 650px; height: 650px; opacity: 0.4; }
+
+        /* Center Content */
+        .orbit-center {
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .orbit-center img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-secondary);
+            box-shadow: 0 0 30px rgba(80, 200, 120, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .orbit-center h2 { font-size: 2rem; font-weight: 600; color: var(--text-main); }
+        .orbit-center p { font-size: 0.9rem; opacity: 0.9; color: var(--accent-primary); }
+
+        /* Floating Items */
+        .floater {
+            position: absolute;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s;
+            background: #000;
+            border: 1px solid var(--accent-secondary);
+        }
+        .floater:hover { transform: scale(1.2); z-index: 20; border-color: var(--accent-primary); }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+        }
+
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            background: var(--bg-deep);
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Brand Colors maintained but glows adapted */
+        .icon-html { color: #e34c26; box-shadow: 0 0 15px rgba(227, 76, 38, 0.2); }
+        .icon-css { color: #264de4; box-shadow: 0 0 15px rgba(38, 77, 228, 0.2); }
+        .icon-js { color: #f7df1e; box-shadow: 0 0 15px rgba(247, 223, 30, 0.2); }
+        .icon-python { color: #306998; box-shadow: 0 0 15px rgba(48, 105, 152, 0.2); }
+
+        /* Positions */
+        .pos-1 { top: 38%; left: 35%; transform: translate(-50%, -50%); }
+        .pos-2 { bottom: 35%; right: 35%; transform: translate(50%, 50%); }
+        .pos-3 { bottom: 25%; left: 42%; transform: translate(-50%, 50%); }
+        .pos-4 { top: 25%; left: 22%; transform: translate(-50%, -50%); }
+        .pos-5 { top: 15%; right: 28%; transform: translate(50%, -50%); }
+        .pos-6 { bottom: 15%; right: 30%; transform: translate(50%, 50%); }
+        .pos-7 { top: 40%; right: 10%; transform: translate(50%, -50%); }
+        .pos-8 { top: 50%; right: 0%; transform: translate(100%, -50%); }
+
+        /* --- Generic Section Styling --- */
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+        .section-header .line {
+            width: 60px;
+            height: 4px;
+            /* Line Gradient */
+            background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        /* --- Grid & Cards --- */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .glass-card {
+            background: var(--card-glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(11, 110, 79, 0.3);
+            border-color: var(--accent-secondary);
+        }
+
+        /* Project Cards */
+        .project-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            filter: brightness(0.9); /* Slight dim to match mood */
+        }
+        .glass-card:hover .project-img { filter: brightness(1); }
+
+        .project-title { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text-main); }
+        .project-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+        .btn-link { color: var(--accent-primary); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+        .btn-link:hover { text-decoration: underline; text-shadow: 0 0 8px rgba(80, 200, 120, 0.5); }
+
+        /* Service Cards */
+        .service-icon {
+            font-size: 2rem;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px rgba(80, 200, 120, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-glass);
+            padding: 3rem 0;
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 1100px) {
+            h1 { font-size: 3rem; }
+            .hero-section { grid-template-columns: 1fr; text-align: center; padding-top: 4rem; }
+            .hero-text { max-width: 100%; margin-bottom: 4rem; display: flex; flex-direction: column; align-items: center; }
+            .ring-3 { display: none; }
+            .orbit-container { transform: scale(0.9); height: 500px; }
+            .partners { justify-content: center; }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="background-gradient"></div>
+
+    <div class="container">
+        <nav>
+            <a href="#" class="logo">
+                <img src="https://www.tarmacq.com/Untitled%20(12).png" alt="tarmacq">
+            </a>
+            <div class="nav-links hidden-mobile">
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#projects">Projects</a>
+                <a href="#reviews">Reviews</a>
+            </div>
+            <div class="nav-actions">
+                <a href="https://instagram.com/tarmacq" class="btn-social"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://discord.com/users/1129726655569600602" class="btn-social"><i class="fa-brands fa-discord"></i></a>
+                <a href="mailto:ryanyagouni@gmail.com" class="btn-join">Contact Me</a>
+            </div>
+        </nav>
+
+        <section class="hero-section">
+            <div class="hero-text">
+                <h1>Hi, I'm tarmacq.</h1>
+                
+                <p class="hero-desc">
+                    A passionate <span class="highlight">Web Developer</span> and <span class="highlight">UI/UX Designer</span> creating immersive, high-performance websites and applications.
+                </p>
+
+                <div class="cta-container">
+                    <a href="#projects" class="btn-start">Explore My Work <i class="fa-solid fa-arrow-right"></i></a>
+                    <div class="cursor-tag">
+                        <div class="cursor-pointer"></div>
+                        <div class="cursor-label">Open for work</div>
+                    </div>
+                </div>
+
+                <div class="partners">
+                    <div class="partner-logo"><i class="fa-brands fa-html5"></i> HTML5</div>
+                    <div class="partner-logo"><i class="fa-brands fa-js"></i> JavaScript</div>
+                    <div class="partner-logo"><i class="fa-brands fa-python"></i> Python</div>
+                    <div class="partner-logo"><i class="fa-brands fa-git-alt"></i> Git</div>
+                </div>
+            </div>
+
+            <div class="orbit-container">
+                <div class="ring ring-1"></div>
+                <div class="ring ring-2"></div>
+                <div class="ring ring-3"></div>
+
+                <div class="orbit-center">
+                    <img src="https://www.tarmacq.com/Untitled%20(10).png" alt="Profile">
+                    
+                    <p>The tarmacq</p>
+                    <h2>Universe</h2>
+                </div>
+
+                <div class="floater icon-box icon-html pos-1" title="HTML">
+                    <i class="fa-brands fa-html5"></i>
+                </div>
+
+                <div class="floater icon-box icon-css pos-2" title="CSS">
+                    <i class="fa-brands fa-css3-alt"></i>
+                </div>
+
+                <div class="floater avatar pos-3" title="Gamer1320 (Qatar VA)">
+                    <img src="https://jsali-lvrgt.github.io/jsali_lvrgt.png" alt="Client 1">
+                </div>
+
+                <div class="floater avatar pos-4" title="Ilhan (Air Europa)">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/ronnieliang-pilot.png_ex=68cfffad&is=68ceae2d&hm=8e201ec1ef5872f4dbf8b6eb7cfa60b1da5698cb55d9c182f59b6bc4be15f8b9&?updatedAt=1758375514676" alt="Client 2">
+                </div>
+
+                <div class="floater avatar pos-5" title="camping_n (Iberia VA)">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/8250fecdc62c4e42a693196f2179f18f.webp_size=1024?updatedAt=1758378502069" alt="Client 3">
+                </div>
+
+                <div class="floater icon-box icon-js pos-6" title="JavaScript">
+                    <i class="fa-brands fa-js"></i>
+                </div>
+
+                <div class="floater icon-box icon-python pos-7" title="Python">
+                    <i class="fa-brands fa-python"></i>
+                </div>
+
+                <div class="floater icon-box pos-8" title="Git" style="color: #f1502f;">
+                    <i class="fa-brands fa-git-alt"></i>
+                </div>
+            </div>
+        </section>
+
+        <section id="services">
+            <div class="section-header">
+                <h2>Services</h2>
+                <div class="line"></div>
+            </div>
+            <div class="grid-3">
+                <div class="glass-card">
+                    <div class="service-icon"><i class="fa-solid fa-code"></i></div>
+                    <h3>Web Development</h3>
+                    <p style="color:var(--text-muted); margin-top:10px;">Crafting responsive, performant websites and apps from concept to deployment.</p>
+                </div>
+                <div class="glass-card">
+                    <div class="service-icon"><i class="fa-solid fa-pen-nib"></i></div>
+                    <h3>UI/UX Design</h3>
+                    <p style="color:var(--text-muted); margin-top:10px;">Designing intuitive interfaces that prioritize user engagement and satisfaction.</p>
+                </div>
+                <div class="glass-card">
+                    <div class="service-icon"><i class="fa-solid fa-terminal"></i></div>
+                    <h3>Technical Consulting</h3>
+                    <p style="color:var(--text-muted); margin-top:10px;">Expert advice on tech stacks, optimization, and strategic project execution.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="section-header">
+                <h2>Featured Projects</h2>
+                <div class="line"></div>
+            </div>
+            <div class="grid-3">
+                <div class="glass-card">
+                    <img src="Untitled (22).png" alt="oneworld" class="project-img">
+                    <h3 class="project-title">Flow by tarmacq</h3>
+                    <p class="project-desc">Send files without limits<br> Direct browser-to-browser encrypted transfers. No cloud, no storage limits, no privacy concerns.</p>
+                    <a href="https://flow.tarmacq.com" class="btn-link">View Project <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="glass-card">
+                    <img src="Untitled-1.png" alt="jsali" class="project-img">
+                    <h3 class="project-title">tarmacq news</h3>
+                    <p class="project-desc">Get the latest news from all around the world, from your best news channel.</p>
+                    <a href="https://news.tarmacq.com" class="btn-link">View Project <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="glass-card">
+                    <img src="Untitled (13).png" alt="studios" class="project-img">
+                    <h3 class="project-title">tarmacq auth</h3>
+                    <p class="project-desc">One account, millions of possibilities. Access all the tarmacq ecosystem with only one account.</p>
+                    <a href="https://auth.tarmacq.com" class="btn-link">View Project <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <section id="reviews">
+            <div class="section-header">
+                <h2>Client Reviews</h2>
+                <div class="line"></div>
+            </div>
+            <div class="grid-3">
+                <div class="glass-card" style="display:flex; align-items:center; gap:15px;">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/c9ec2ac42f8e0b4d302cfd7b174fb921.webp_size=1024?updatedAt=1758375404749" style="width:50px; height:50px; border-radius:50%;" alt="Gamer1320">
+                    <div>
+                        <p style="font-style:italic; font-size:0.9rem;">"tarmacq has always been amazing at coding..."</p>
+                        <h4 style="margin-top:5px; color:var(--accent-primary);">Gamer1320</h4>
+                    </div>
+                </div>
+                <div class="glass-card" style="display:flex; align-items:center; gap:15px;">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/ronnieliang-pilot.png_ex=68cfffad&is=68ceae2d&hm=8e201ec1ef5872f4dbf8b6eb7cfa60b1da5698cb55d9c182f59b6bc4be15f8b9&?updatedAt=1758375514676" style="width:50px; height:50px; border-radius:50%;" alt="Ilhan">
+                    <div>
+                        <p style="font-style:italic; font-size:0.9rem;">"tarmacq is honestly one of the best devs I know..."</p>
+                        <h4 style="margin-top:5px; color:var(--accent-primary);">Ilhan</h4>
+                    </div>
+                </div>
+                <div class="glass-card" style="display:flex; align-items:center; gap:15px;">
+                    <img src="https://ik.imagekit.io/hswtnwf8i/8250fecdc62c4e42a693196f2179f18f.webp_size=1024?updatedAt=1758378502069" style="width:50px; height:50px; border-radius:50%;" alt="camping_n">
+                    <div>
+                        <p style="font-style:italic; font-size:0.9rem;">"tarmacq is a very active and passionate dev..."</p>
+                        <h4 style="margin-top:5px; color:var(--accent-primary);">camping_n</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 tarmacq. All Rights Reserved. | <a href="https://www.tarmacq.com/pp" style="color:inherit;">Privacy Policy</a> | <a href="https://www.tarmacq.com/terms" style="color:inherit;">Terms of use</a></p>
+        </footer>
+
+    </div>
+</body>
+</html>
