@@ -1,630 +1,1137 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-     <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta property="og:title" content="tarmacq">
+    <meta property="og:title" content="tarmacq">
     <meta property="og:description" content="Meet the coolest agency that makes it pop!">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.tarmacq.com">
     <meta property="og:image" content="https://www.tarmacq.com/Untitled (10).png">
     <meta property="og:site_name" content="tarmacq">
-    <title>tarmacq - the agency</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>tarmacq — the agency</title>
     <link rel="icon" href="fav.png">
     <link rel="apple-touch-icon" href="https://www.tarmacq.com/fav.png">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         :root {
-            /* --- NEW PALETTE --- */
-            --bg-dark: #013220;         /* Dark Evergreen */
-            --bg-deep: #001a10;         /* Slightly darker for gradients */
-            --text-main: #D1F2EB;       /* Mint Whisper */
-            --text-muted: #8ebcb3;      /* Dimmed Mint */
-            --accent-primary: #50C878;  /* Emerald Green */
-            --accent-secondary: #0B6E4F; /* Royal Amethyst (Teal/Green) */
-            
-            --card-glass: rgba(11, 110, 79, 0.15); /* Tinted with Secondary */
-            --border-glass: rgba(209, 242, 235, 0.1);
-            --glow-color: rgba(80, 200, 120, 0.4);
+            --mint:       #D1F2EB;
+            --emerald:    #50C878;
+            --royal:      #0B6E4F;
+            --deep:       #013220;
+            --abyss:      #00180e;
+            --text-dim:   rgba(209,242,235,0.55);
+            --glass-bg:   rgba(209,242,235,0.06);
+            --glass-border: rgba(209,242,235,0.14);
+            --glass-shine: rgba(209,242,235,0.22);
+            --glow:       rgba(80,200,120,0.35);
+            --glow-soft:  rgba(80,200,120,0.12);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
+        *, *::before, *::after {
+            margin: 0; padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
         }
 
+        ::selection { background: rgba(80,200,120,0.3); color: #fff; }
+
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            width: 100%;
+            background: var(--abyss);
+            color: var(--mint);
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            position: relative;
+            min-height: 100vh;
         }
 
-        /* --- Complex Background Gradient (Redesigned) --- */
-        .background-gradient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
+        /* ─── AMBIENT BACKGROUND ─── */
+        .bg-canvas {
+            position: fixed; inset: 0; z-index: 0;
             background:
-                radial-gradient(circle at 15% 15%, rgba(80, 200, 120, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 85% 60%, rgba(11, 110, 79, 0.25) 0%, transparent 60%),
-                linear-gradient(160deg, var(--bg-dark) 0%, var(--bg-deep) 100%);
-            filter: blur(40px);
+                radial-gradient(ellipse 80% 60% at 15% 10%, rgba(80,200,120,0.13) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 88% 30%, rgba(11,110,79,0.2) 0%, transparent 55%),
+                radial-gradient(ellipse 70% 70% at 50% 90%, rgba(1,50,32,0.5) 0%, transparent 60%),
+                linear-gradient(180deg, #00180e 0%, #011a0c 50%, #000f07 100%);
         }
 
-        /* --- Layout --- */
-        .container {
-            max-width: 1400px;
+        .bg-orb {
+            position: fixed; border-radius: 50%; filter: blur(80px);
+            pointer-events: none; z-index: 0;
+            animation: orbDrift 20s ease-in-out infinite alternate;
+        }
+        .bg-orb-1 {
+            width: 600px; height: 600px;
+            top: -150px; left: -150px;
+            background: radial-gradient(circle, rgba(80,200,120,0.09) 0%, transparent 70%);
+        }
+        .bg-orb-2 {
+            width: 500px; height: 500px;
+            top: 40%; right: -100px;
+            background: radial-gradient(circle, rgba(11,110,79,0.14) 0%, transparent 70%);
+            animation-delay: -8s;
+        }
+        .bg-orb-3 {
+            width: 400px; height: 400px;
+            bottom: 0; left: 30%;
+            background: radial-gradient(circle, rgba(80,200,120,0.07) 0%, transparent 70%);
+            animation-delay: -14s;
+        }
+
+        @keyframes orbDrift {
+            0%   { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, 30px) scale(1.08); }
+        }
+
+        /* ─── LAYOUT ─── */
+        .wrap {
+            max-width: 1320px;
             margin: 0 auto;
-            padding: 2rem 3rem;
-            display: flex;
-            flex-direction: column;
+            padding: 0 2.5rem;
+            position: relative; z-index: 10;
         }
 
-        section {
-            padding: 6rem 0;
-        }
-
-        /* --- Navigation --- */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0 2rem 0;
+        /* ─── GLASS UTILITY ─── */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px) saturate(1.6);
+            -webkit-backdrop-filter: blur(24px) saturate(1.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
             position: relative;
-            z-index: 50;
+            overflow: hidden;
+        }
+        .glass::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(135deg, rgba(209,242,235,0.07) 0%, transparent 50%);
+            pointer-events: none;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
+        /* ─── NAVIGATION ─── */
+        .nav-wrap {
+            position: fixed; top: 0; left: 0; right: 0;
+            z-index: 100; padding: 1rem 0;
+            transition: all 0.4s ease;
+        }
+
+        .nav-inner {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 0 2.5rem;
             display: flex;
             align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: var(--text-main);
+            justify-content: space-between;
         }
-        
-        .logo img {
-            height: 150px;
-            width: auto;
+
+        .nav-glass {
+            background: rgba(1, 24, 14, 0.7);
+            backdrop-filter: blur(32px) saturate(1.8);
+            -webkit-backdrop-filter: blur(32px) saturate(1.8);
+            border: 1px solid rgba(209,242,235,0.1);
+            border-radius: 100px;
+            padding: 0.6rem 1rem 0.6rem 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 3rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(209,242,235,0.08);
+        }
+
+        .nav-glass::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 10%; right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(209,242,235,0.25), transparent);
+        }
+
+        .nav-logo {
+            display: flex; align-items: center; gap: 0.7rem;
+            text-decoration: none; color: var(--mint);
+            font-family: 'Inter', sans-serif;
+            font-weight: 700; font-size: 1.15rem;
+        }
+
+        .nav-logo img {
+            height: 36px; width: 36px;
             border-radius: 50%;
-            /* Added a subtle green glow to logo */
-            filter: drop-shadow(0 0 5px rgba(80, 200, 120, 0.3));
+            object-fit: cover;
+            border: 1px solid rgba(80,200,120,0.4);
+            box-shadow: 0 0 12px rgba(80,200,120,0.25);
         }
 
         .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            font-size: 0.9rem;
-            color: var(--text-muted);
+            display: flex; gap: 0.2rem;
+            list-style: none;
         }
 
         .nav-links a {
             text-decoration: none;
-            color: inherit;
-            transition: all 0.3s;
+            color: var(--text-dim);
+            font-size: 0.875rem;
+            font-weight: 400;
+            padding: 0.45rem 1rem;
+            border-radius: 100px;
+            transition: all 0.25s ease;
+            letter-spacing: 0.01em;
         }
 
         .nav-links a:hover {
-            color: var(--accent-primary);
-            text-shadow: 0 0 10px var(--glow-color);
+            color: var(--mint);
+            background: rgba(80,200,120,0.1);
         }
 
         .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            font-size: 0.9rem;
+            display: flex; align-items: center; gap: 0.8rem;
         }
 
-        .btn-social {
-            color: var(--text-main);
-            font-size: 1.2rem;
-            transition: transform 0.3s;
-        }
-        .btn-social:hover { transform: scale(1.2); color: var(--accent-primary); }
-
-        .btn-join {
-            background: rgba(80, 200, 120, 0.1);
-            padding: 0.6rem 1.5rem;
-            border-radius: 50px;
+        .nav-social {
+            color: var(--text-dim);
+            font-size: 1.05rem;
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            transition: all 0.25s ease;
             text-decoration: none;
-            color: var(--text-main);
-            border: 1px solid var(--accent-secondary);
-            box-shadow: 0 0 15px rgba(11, 110, 79, 0.3);
-            transition: all 0.3s;
+        }
+        .nav-social:hover {
+            color: var(--mint);
+            background: rgba(80,200,120,0.12);
         }
 
-        .btn-join:hover {
-            background: rgba(80, 200, 120, 0.2);
-            box-shadow: 0 0 25px rgba(80, 200, 120, 0.5);
-            border-color: var(--accent-primary);
+        .nav-cta {
+            background: linear-gradient(135deg, rgba(80,200,120,0.2), rgba(11,110,79,0.3));
+            border: 1px solid rgba(80,200,120,0.35);
+            color: var(--mint);
+            padding: 0.5rem 1.4rem;
+            border-radius: 100px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(80,200,120,0.08), inset 0 1px 0 rgba(209,242,235,0.15);
+            white-space: nowrap;
+        }
+        .nav-cta:hover {
+            background: linear-gradient(135deg, rgba(80,200,120,0.3), rgba(11,110,79,0.45));
+            box-shadow: 0 0 30px rgba(80,200,120,0.2);
+            transform: translateY(-1px);
         }
 
-        /* --- Hero Section --- */
-        .hero-section {
-            min-height: 85vh;
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 100vh;
             display: grid;
             grid-template-columns: 1fr 1fr;
             align-items: center;
+            gap: 4rem;
+            padding-top: 8rem;
             padding-bottom: 4rem;
         }
 
-        /* Left Column */
-        .hero-text {
-            max-width: 650px;
-            position: relative;
-            z-index: 10;
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            background: rgba(80,200,120,0.1);
+            border: 1px solid rgba(80,200,120,0.25);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--emerald);
+            margin-bottom: 1.8rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            animation: fadeSlideUp 0.8s ease both;
         }
 
-        h1 {
-            font-size: 4rem;
-            line-height: 1.1;
+        .hero-badge .dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--emerald);
+            box-shadow: 0 0 8px var(--emerald);
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%       { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .hero h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(3rem, 5vw, 5rem);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
             margin-bottom: 1.5rem;
-            font-weight: 600;
-            letter-spacing: -1px;
-            /* Gradient from Mint to Emerald */
-            background: linear-gradient(90deg, #ffffff, var(--accent-primary));
+            animation: fadeSlideUp 0.8s ease 0.1s both;
+        }
+
+        .hero h1 .name-grad {
+            background: linear-gradient(135deg, #fff 20%, var(--emerald) 70%, #a8f5c5 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-        
-        .hero-desc {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            margin-bottom: 2.5rem;
-            line-height: 1.6;
-            max-width: 90%;
+            background-clip: text;
         }
 
-        .highlight { color: var(--accent-primary); font-weight: 600; }
-
-        .cta-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .btn-start {
-            /* Gradient from Deep Teal to Emerald */
-            background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
-            color: #013220; /* Dark text on bright button for contrast */
-            font-weight: 600;
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            border: none;
+        .hero-sub {
             font-size: 1.1rem;
-            cursor: pointer;
+            color: var(--text-dim);
+            line-height: 1.7;
+            max-width: 480px;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            animation: fadeSlideUp 0.8s ease 0.2s both;
+        }
+
+        .hero-sub strong { color: var(--mint); font-weight: 500; }
+
+        .hero-btns {
             display: flex;
             align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            box-shadow: 0 0 20px rgba(80, 200, 120, 0.4);
-            transition: transform 0.3s;
-        }
-        
-        .btn-start:hover { transform: scale(1.05); filter: brightness(1.1); }
-        .btn-start i { color: #013220; }
-
-        .cursor-tag {
-            position: absolute;
-            bottom: -35px;
-            right: -40px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .cursor-pointer {
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-bottom: 15px solid var(--accent-primary);
-            transform: rotate(-30deg);
-        }
-
-        .cursor-label {
-            background: var(--accent-primary);
-            color: var(--bg-dark);
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-
-        /* Tech Stack / Partners */
-        .partners {
-            margin-top: 5rem;
-            display: flex;
+            gap: 1rem;
             flex-wrap: wrap;
-            gap: 2rem;
-            opacity: 0.8;
-            align-items: center;
+            margin-bottom: 3rem;
+            animation: fadeSlideUp 0.8s ease 0.3s both;
         }
 
-        .partner-logo {
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.85rem 2rem;
+            background: linear-gradient(135deg, rgba(80,200,120,0.25) 0%, rgba(11,110,79,0.4) 100%);
+            border: 1px solid rgba(80,200,120,0.5);
+            border-radius: 100px;
+            color: var(--mint);
+            text-decoration: none;
             font-size: 0.9rem;
             font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(209, 242, 235, 0.05);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            border: 1px solid rgba(209, 242, 235, 0.1);
-            color: var(--text-main);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(80,200,120,0.12), inset 0 1px 0 rgba(209,242,235,0.15);
+            backdrop-filter: blur(10px);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(80,200,120,0.25), inset 0 1px 0 rgba(209,242,235,0.2);
+            border-color: rgba(80,200,120,0.7);
+            background: linear-gradient(135deg, rgba(80,200,120,0.35) 0%, rgba(11,110,79,0.55) 100%);
+        }
+        .btn-primary i { transition: transform 0.3s; }
+        .btn-primary:hover i { transform: translateX(4px); }
+
+        .btn-ghost {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.85rem 1.8rem;
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            transition: all 0.3s ease;
+        }
+        .btn-ghost:hover {
+            color: var(--mint);
+            border-color: rgba(209,242,235,0.25);
+            background: rgba(209,242,235,0.04);
         }
 
-        /* Right Column (Orbit) */
-        .orbit-container {
-            position: relative;
-            width: 100%;
-            height: 600px;
+        .hero-stack {
+            display: flex; gap: 0.6rem; flex-wrap: wrap;
+            animation: fadeSlideUp 0.8s ease 0.4s both;
+        }
+
+        .stack-pill {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.35rem 0.9rem;
+            background: rgba(209,242,235,0.05);
+            border: 1px solid rgba(209,242,235,0.1);
+            border-radius: 100px;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            font-weight: 400;
+            backdrop-filter: blur(6px);
+            transition: all 0.25s;
+        }
+        .stack-pill:hover {
+            background: rgba(80,200,120,0.1);
+            border-color: rgba(80,200,120,0.25);
+            color: var(--mint);
+        }
+        .stack-pill i { color: var(--emerald); font-size: 0.85rem; }
+
+        /* ─── ORBIT VISUAL ─── */
+        .hero-visual {
             display: flex;
+            align-items: center;
             justify-content: center;
-            align-items: center;
+            position: relative;
+            height: 520px;
+            animation: fadeSlideUp 1s ease 0.2s both;
         }
 
-        /* Rings */
+        .orbit-core {
+            position: relative;
+            width: 200px; height: 200px;
+            z-index: 5;
+        }
+
+        .orbit-core-glass {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, rgba(80,200,120,0.2), rgba(11,110,79,0.15) 60%, rgba(1,50,32,0.3));
+            border: 1.5px solid rgba(80,200,120,0.35);
+            box-shadow:
+                0 0 60px rgba(80,200,120,0.15),
+                0 0 120px rgba(80,200,120,0.06),
+                inset 0 2px 0 rgba(209,242,235,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .orbit-core-glass::before {
+            content: '';
+            position: absolute;
+            top: 10%; left: 10%;
+            width: 40%; height: 40%;
+            background: radial-gradient(circle, rgba(209,242,235,0.12), transparent);
+            border-radius: 50%;
+        }
+
+        .orbit-core-glass img {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(80,200,120,0.4);
+            margin-bottom: 0.5rem;
+        }
+
+        .orbit-core-glass p {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .orbit-core-glass h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--mint);
+        }
+
         .ring {
             position: absolute;
-            border: 1px solid rgba(80, 200, 120, 0.15);
             border-radius: 50%;
-            top: 50%;
-            left: 50%;
+            border: 1px solid rgba(80,200,120,0.15);
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 30px rgba(11, 110, 79, 0.1);
+            animation: spinRing linear infinite;
+        }
+        .ring-1 { width: 320px; height: 320px; animation-duration: 22s; border-color: rgba(80,200,120,0.12); }
+        .ring-2 { width: 430px; height: 430px; animation-duration: 34s; animation-direction: reverse; border-color: rgba(11,110,79,0.15); border-style: dashed; }
+        .ring-3 { width: 520px; height: 520px; animation-duration: 50s; border-color: rgba(80,200,120,0.07); }
+
+        @keyframes spinRing {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to   { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
-        .ring-1 { width: 250px; height: 250px; }
-        .ring-2 { width: 450px; height: 450px; }
-        .ring-3 { width: 650px; height: 650px; opacity: 0.4; }
-
-        /* Center Content */
-        .orbit-center {
-            text-align: center;
-            z-index: 10;
-        }
-        
-        .orbit-center img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 4px solid var(--accent-secondary);
-            box-shadow: 0 0 30px rgba(80, 200, 120, 0.3);
-            margin-bottom: 10px;
-        }
-
-        .orbit-center h2 { font-size: 2rem; font-weight: 600; color: var(--text-main); }
-        .orbit-center p { font-size: 0.9rem; opacity: 0.9; color: var(--accent-primary); }
-
-        /* Floating Items */
         .floater {
             position: absolute;
+            top: 50%; left: 50%;
+            width: 48px; height: 48px;
             border-radius: 50%;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s;
-            background: #000;
-            border: 1px solid var(--accent-secondary);
-        }
-        .floater:hover { transform: scale(1.2); z-index: 20; border-color: var(--accent-primary); }
-
-        .avatar {
-            width: 50px;
-            height: 50px;
-        }
-
-        .avatar img { width: 100%; height: 100%; object-fit: cover; }
-
-        .icon-box {
-            width: 50px;
-            height: 50px;
-            background: var(--bg-deep);
-            color: white;
-            font-size: 1.2rem;
-        }
-
-        /* Brand Colors maintained but glows adapted */
-        .icon-html { color: #e34c26; box-shadow: 0 0 15px rgba(227, 76, 38, 0.2); }
-        .icon-css { color: #264de4; box-shadow: 0 0 15px rgba(38, 77, 228, 0.2); }
-        .icon-js { color: #f7df1e; box-shadow: 0 0 15px rgba(247, 223, 30, 0.2); }
-        .icon-python { color: #306998; box-shadow: 0 0 15px rgba(48, 105, 152, 0.2); }
-
-        /* Positions */
-        .pos-1 { top: 38%; left: 35%; transform: translate(-50%, -50%); }
-        .pos-2 { bottom: 35%; right: 35%; transform: translate(50%, 50%); }
-        .pos-3 { bottom: 25%; left: 42%; transform: translate(-50%, 50%); }
-        .pos-4 { top: 25%; left: 22%; transform: translate(-50%, -50%); }
-        .pos-5 { top: 15%; right: 28%; transform: translate(50%, -50%); }
-        .pos-6 { bottom: 15%; right: 30%; transform: translate(50%, 50%); }
-        .pos-7 { top: 40%; right: 10%; transform: translate(50%, -50%); }
-        .pos-8 { top: 50%; right: 0%; transform: translate(100%, -50%); }
-
-        /* --- Generic Section Styling --- */
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-        .section-header h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--text-main);
-        }
-        .section-header .line {
-            width: 60px;
-            height: 4px;
-            /* Line Gradient */
-            background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
-            margin: 0 auto;
-            border-radius: 2px;
-        }
-
-        /* --- Grid & Cards --- */
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .glass-card {
-            background: var(--card-glass);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+            background: rgba(1,24,14,0.8);
+            border: 1px solid rgba(80,200,120,0.3);
             backdrop-filter: blur(10px);
-            border: 1px solid var(--border-glass);
-            border-radius: 20px;
-            padding: 2rem;
-            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 0 12px rgba(80,200,120,0.1);
+            animation: floatBob 3s ease-in-out infinite alternate;
         }
-        .glass-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(11, 110, 79, 0.3);
-            border-color: var(--accent-secondary);
-        }
-
-        /* Project Cards */
-        .project-img {
-            width: 100%;
-            height: 200px;
+        .floater img {
+            width: 100%; height: 100%;
+            border-radius: 50%;
             object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-            filter: brightness(0.9); /* Slight dim to match mood */
         }
-        .glass-card:hover .project-img { filter: brightness(1); }
 
-        .project-title { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text-main); }
-        .project-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
-        .btn-link { color: var(--accent-primary); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
-        .btn-link:hover { text-decoration: underline; text-shadow: 0 0 8px rgba(80, 200, 120, 0.5); }
+        @keyframes floatBob {
+            from { transform: translateY(0); }
+            to   { transform: translateY(-8px); }
+        }
 
-        /* Service Cards */
-        .service-icon {
-            font-size: 2rem;
-            color: var(--accent-primary);
+        /* Positions around rings */
+        .pos-1 { transform: translate(-50%, -50%) translate(160px, 0); animation-delay: 0s; color: #e34c26; }
+        .pos-2 { transform: translate(-50%, -50%) translate(0, -160px); animation-delay: -0.5s; color: #264de4; }
+        .pos-3 { transform: translate(-50%, -50%) translate(-160px, 0); animation-delay: -1s; }
+        .pos-4 { transform: translate(-50%, -50%) translate(0, 160px); animation-delay: -1.5s; }
+        .pos-5 { transform: translate(-50%, -50%) translate(215px, -65px); animation-delay: -0.7s; }
+        .pos-6 { transform: translate(-50%, -50%) translate(-215px, -65px); animation-delay: -0.3s; color: #f0db4f; }
+        .pos-7 { transform: translate(-50%, -50%) translate(130px, 180px); animation-delay: -1.2s; color: #3572A5; }
+        .pos-8 { transform: translate(-50%, -50%) translate(-130px, 180px); animation-delay: -0.8s; color: #f1502f; }
+
+        /* ─── SECTION COMMON ─── */
+        section {
+            padding: 7rem 0;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--emerald);
             margin-bottom: 1rem;
-            text-shadow: 0 0 15px rgba(80, 200, 120, 0.4);
         }
 
-        /* Footer */
-        footer {
-            border-top: 1px solid var(--border-glass);
-            padding: 3rem 0;
+        .section-label::before {
+            content: '';
+            display: block;
+            width: 24px; height: 1px;
+            background: var(--emerald);
+        }
+
+        .section-title {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            color: var(--mint);
+        }
+
+        .section-sub {
+            color: var(--text-dim);
+            font-size: 1rem;
+            max-width: 500px;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .section-head {
+            margin-bottom: 3.5rem;
+        }
+
+        /* ─── SERVICES ─── */
+        #services { background: transparent; }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.2rem;
+        }
+
+        .service-card {
+            padding: 2.2rem;
+            transition: all 0.4s ease;
+            cursor: default;
+        }
+
+        .service-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(80,200,120,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 40px rgba(80,200,120,0.08);
+        }
+
+        .service-icon-wrap {
+            width: 52px; height: 52px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(80,200,120,0.15), rgba(11,110,79,0.2));
+            border: 1px solid rgba(80,200,120,0.2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem;
+            color: var(--emerald);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .service-card:hover .service-icon-wrap {
+            background: linear-gradient(135deg, rgba(80,200,120,0.25), rgba(11,110,79,0.35));
+            box-shadow: 0 0 25px rgba(80,200,120,0.2);
+        }
+
+        .service-card h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--mint);
+        }
+
+        .service-card p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            line-height: 1.65;
+            font-weight: 300;
+        }
+
+        /* ─── PROJECTS ─── */
+        #projects { background: transparent; }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.2rem;
+        }
+
+        .project-card {
+            padding: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(80,200,120,0.3);
+            box-shadow: 0 24px 64px rgba(0,0,0,0.4), 0 0 50px rgba(80,200,120,0.08);
+        }
+
+        .project-img-wrap {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, rgba(11,110,79,0.3), rgba(1,50,32,0.6));
+        }
+
+        .project-img-wrap img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7) saturate(0.8);
+            transition: all 0.5s ease;
+        }
+
+        .project-card:hover .project-img-wrap img {
+            filter: brightness(0.85) saturate(1.1);
+            transform: scale(1.05);
+        }
+
+        .project-img-placeholder {
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem;
+            color: rgba(80,200,120,0.3);
+        }
+
+        .project-body { padding: 1.6rem 1.8rem 1.8rem; }
+
+        .project-tag {
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--emerald);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-card h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--mint);
+            margin-bottom: 0.6rem;
+        }
+
+        .project-card p {
+            color: var(--text-dim);
+            font-size: 0.875rem;
+            line-height: 1.6;
+            font-weight: 300;
+            margin-bottom: 1.2rem;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--emerald);
+            text-decoration: none;
+            transition: gap 0.25s;
+        }
+        .project-link:hover { gap: 0.7rem; }
+
+        /* ─── REVIEWS ─── */
+        #reviews { background: transparent; }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.2rem;
+        }
+
+        .review-card {
+            padding: 2rem;
+            transition: all 0.4s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(80,200,120,0.25);
+        }
+
+        .review-stars {
+            display: flex; gap: 3px;
+            margin-bottom: 1rem;
+        }
+        .review-stars i { color: var(--emerald); font-size: 0.75rem; }
+
+        .review-text {
+            font-style: italic;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .review-author {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .review-author img {
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid rgba(80,200,120,0.3);
+        }
+
+        .review-author-name {
+            font-family: 'Sora', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--mint);
+        }
+
+        .review-author-role {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        /* ─── STATS STRIP ─── */
+        .stats-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 7rem;
+        }
+
+        .stat-item {
+            padding: 2.5rem 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
             text-align: center;
-            color: var(--text-muted);
-            margin-top: 2rem;
+            position: relative;
+            transition: background 0.3s;
+        }
+        .stat-item:hover { background: rgba(80,200,120,0.06); }
+        .stat-item + .stat-item {
+            border-left: 1px solid var(--glass-border);
         }
 
-        @media (max-width: 1100px) {
-            h1 { font-size: 3rem; }
-            .hero-section { grid-template-columns: 1fr; text-align: center; padding-top: 4rem; }
-            .hero-text { max-width: 100%; margin-bottom: 4rem; display: flex; flex-direction: column; align-items: center; }
-            .ring-3 { display: none; }
-            .orbit-container { transform: scale(0.9); height: 500px; }
-            .partners { justify-content: center; }
+        .stat-number {
+            font-family: 'Sora', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, #fff, var(--emerald));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.4rem;
         }
-        
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+
+        .stat-label {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            font-weight: 400;
+            letter-spacing: 0.02em;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            position: relative; z-index: 10;
+            padding: 3rem 0 2rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-brand {
+            font-family: 'Sora', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--mint);
+        }
+
+        .footer-links {
+            display: flex; gap: 1.5rem;
+        }
+
+        .footer-links a {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover { color: var(--mint); }
+
+        .footer-copy {
+            font-size: 0.78rem;
+            color: rgba(209,242,235,0.3);
+        }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 900px) {
+            .hero { grid-template-columns: 1fr; padding-top: 6rem; }
+            .hero-visual { display: none; }
+            .services-grid, .projects-grid, .reviews-grid { grid-template-columns: 1fr; }
+            .stats-strip { grid-template-columns: 1fr; }
+            .stat-item + .stat-item { border-left: none; border-top: 1px solid var(--glass-border); }
+            .nav-links { display: none; }
+            .nav-glass { gap: 1rem; }
+            .footer-inner { flex-direction: column; align-items: flex-start; }
+        }
+
+        @media (max-width: 600px) {
+            .wrap { padding: 0 1.2rem; }
+            .hero h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
-
 <body>
 
-    <div class="background-gradient"></div>
+    <!-- Background -->
+    <div class="bg-canvas"></div>
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
 
-    <div class="container">
-        <nav>
-            <a href="#" class="logo">
-                <img src="https://www.tarmacq.com/Untitled%20(12).png" alt="tarmacq">
-            </a>
-            <div class="nav-links hidden-mobile">
-                <a href="#about">About</a>
-                <a href="#services">Services</a>
-                <a href="#projects">Projects</a>
-                <a href="#reviews">Reviews</a>
-            </div>
-            <div class="nav-actions">
-                <a href="https://instagram.com/tarmacq" class="btn-social"><i class="fa-brands fa-instagram"></i></a>
-                <a href="https://discord.com/users/1129726655569600602" class="btn-social"><i class="fa-brands fa-discord"></i></a>
-                <a href="mailto:ryanyagouni@gmail.com" class="btn-join">Contact Me</a>
-            </div>
-        </nav>
+    <!-- Navigation -->
+    <nav class="nav-wrap">
+        <div class="nav-inner">
+            <div class="nav-glass">
+                <a href="#" class="nav-logo">
+                    <img src="https://www.tarmacq.com/Untitled%20(12).png" alt="tarmacq" onerror="this.style.display='none'">
+                    tarmacq agency
+                </a>
 
-        <section class="hero-section">
+                <ul class="nav-links">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#reviews">Reviews</a></li>
+                </ul>
+
+                <div class="nav-actions">
+                    <a href="https://instagram.com/tarmacq" class="nav-social" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://discord.com/users/1129726655569600602" class="nav-social" target="_blank"><i class="fa-brands fa-discord"></i></a>
+                    <a href="mailto:contact@tarmacq.com" class="nav-cta">Contact Me</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="wrap">
+        <section class="hero" id="about">
             <div class="hero-text">
-                <h1>Hi, I'm tarmacq.</h1>
-                
-                <p class="hero-desc">
-                    A passionate <span class="highlight">Web Developer</span> and <span class="highlight">UI/UX Designer</span> creating immersive, high-performance websites and applications.
+                <div class="hero-badge">
+                    <span class="dot"></span>
+                    Available for work
+                </div>
+
+                <h1>Hi, we are<br><span class="name-grad">tarmacq.</span></h1>
+
+                <p class="hero-sub">
+                    the agency that makes the most ssspicy websites!
+                    <br> why do we need something to write here, quality speaks for itself.
                 </p>
 
-                <div class="cta-container">
-                    <a href="#projects" class="btn-start">Explore My Work <i class="fa-solid fa-arrow-right"></i></a>
-                    <div class="cursor-tag">
-                        <div class="cursor-pointer"></div>
-                        <div class="cursor-label">Open for work</div>
-                    </div>
+                <div class="hero-btns">
+                    <a href="#projects" class="btn-primary">Explore our Work <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="mailto:contact@tarmacq.com" class="btn-ghost">Get in touch</a>
                 </div>
 
-                <div class="partners">
-                    <div class="partner-logo"><i class="fa-brands fa-html5"></i> HTML5</div>
-                    <div class="partner-logo"><i class="fa-brands fa-js"></i> JavaScript</div>
-                    <div class="partner-logo"><i class="fa-brands fa-python"></i> Python</div>
-                    <div class="partner-logo"><i class="fa-brands fa-git-alt"></i> Git</div>
+                <div class="hero-stack">
+                    <span class="stack-pill"><i class="fa-brands fa-html5"></i> HTML5</span>
+                    <span class="stack-pill"><i class="fa-brands fa-js"></i> JavaScript</span>
+                    <span class="stack-pill"><i class="fa-brands fa-python"></i> Python</span>
+                    <span class="stack-pill"><i class="fa-brands fa-css3-alt"></i> CSS3</span>
+                    <span class="stack-pill"><i class="fa-brands fa-git-alt"></i> Git</span>
                 </div>
             </div>
 
-            <div class="orbit-container">
+            <!-- Orbit Visual -->
+            <div class="hero-visual">
                 <div class="ring ring-1"></div>
                 <div class="ring ring-2"></div>
                 <div class="ring ring-3"></div>
 
-                <div class="orbit-center">
-                    <img src="https://www.tarmacq.com/Untitled%20(10).png" alt="Profile">
-                    
-                    <p>The tarmacq</p>
-                    <h2>Universe</h2>
+                <div class="orbit-core">
+                    <div class="orbit-core-glass">
+                        <img src="https://www.tarmacq.com/Untitled%20(10).png" alt="tarmacq" onerror="this.style.background='rgba(80,200,120,0.1)'">
+                        <p>The tarmacq</p>
+                        <h2>Universe</h2>
+                    </div>
                 </div>
 
-                <div class="floater icon-box icon-html pos-1" title="HTML">
-                    <i class="fa-brands fa-html5"></i>
-                </div>
-
-                <div class="floater icon-box icon-css pos-2" title="CSS">
-                    <i class="fa-brands fa-css3-alt"></i>
-                </div>
-
-                <div class="floater avatar pos-3" title="Gamer1320 (Qatar VA)">
+                <div class="floater pos-1"><i class="fa-brands fa-html5"></i></div>
+                <div class="floater pos-2"><i class="fa-brands fa-css3-alt" style="color:#264de4"></i></div>
+                <div class="floater pos-3">
                     <img src="https://jsali-lvrgt.github.io/jsali_lvrgt.png" alt="Client 1">
                 </div>
-
-                <div class="floater avatar pos-4" title="Ilhan (Air Europa)">
+                <div class="floater pos-4">
                     <img src="https://ik.imagekit.io/hswtnwf8i/ronnieliang-pilot.png_ex=68cfffad&is=68ceae2d&hm=8e201ec1ef5872f4dbf8b6eb7cfa60b1da5698cb55d9c182f59b6bc4be15f8b9&?updatedAt=1758375514676" alt="Client 2">
                 </div>
-
-                <div class="floater avatar pos-5" title="camping_n (Iberia VA)">
+                <div class="floater pos-5">
                     <img src="https://ik.imagekit.io/hswtnwf8i/8250fecdc62c4e42a693196f2179f18f.webp_size=1024?updatedAt=1758378502069" alt="Client 3">
                 </div>
-
-                <div class="floater icon-box icon-js pos-6" title="JavaScript">
-                    <i class="fa-brands fa-js"></i>
-                </div>
-
-                <div class="floater icon-box icon-python pos-7" title="Python">
-                    <i class="fa-brands fa-python"></i>
-                </div>
-
-                <div class="floater icon-box pos-8" title="Git" style="color: #f1502f;">
-                    <i class="fa-brands fa-git-alt"></i>
-                </div>
+                <div class="floater pos-6"><i class="fa-brands fa-js"></i></div>
+                <div class="floater pos-7"><i class="fa-brands fa-python"></i></div>
+                <div class="floater pos-8"><i class="fa-brands fa-git-alt"></i></div>
             </div>
         </section>
 
+        <!-- Stats -->
+        <div class="stats-strip reveal">
+            <div class="stat-item">
+                <div class="stat-number">3+</div>
+                <div class="stat-label">Years of experience</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">10+</div>
+                <div class="stat-label">Projects delivered</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Client satisfaction</div>
+            </div>
+        </div>
+
+        <!-- SERVICES -->
         <section id="services">
-            <div class="section-header">
-                <h2>Services</h2>
-                <div class="line"></div>
+            <div class="section-head reveal">
+                <div class="section-label">What we offer</div>
+                <h2 class="section-title">Services</h2>
+                <p class="section-sub">From concept to deployment — turning ideas into polished digital experiences.</p>
             </div>
-            <div class="grid-3">
-                <div class="glass-card">
-                    <div class="service-icon"><i class="fa-solid fa-code"></i></div>
+
+            <div class="services-grid">
+                <div class="glass service-card reveal">
+                    <div class="service-icon-wrap"><i class="fa-solid fa-code"></i></div>
                     <h3>Web Development</h3>
-                    <p style="color:var(--text-muted); margin-top:10px;">Crafting responsive, performant websites and apps from concept to deployment.</p>
+                    <p>Crafting responsive, performant websites and applications from concept to deployment, built with clean, scalable code.</p>
                 </div>
-                <div class="glass-card">
-                    <div class="service-icon"><i class="fa-solid fa-pen-nib"></i></div>
+                <div class="glass service-card reveal">
+                    <div class="service-icon-wrap"><i class="fa-solid fa-pen-nib"></i></div>
                     <h3>UI/UX Design</h3>
-                    <p style="color:var(--text-muted); margin-top:10px;">Designing intuitive interfaces that prioritize user engagement and satisfaction.</p>
+                    <p>Designing intuitive, beautiful interfaces that prioritize user engagement, accessibility, and lasting visual impact.</p>
                 </div>
-                <div class="glass-card">
-                    <div class="service-icon"><i class="fa-solid fa-terminal"></i></div>
+                <div class="glass service-card reveal">
+                    <div class="service-icon-wrap"><i class="fa-solid fa-terminal"></i></div>
                     <h3>Technical Consulting</h3>
-                    <p style="color:var(--text-muted); margin-top:10px;">Expert advice on tech stacks, optimization, and strategic project execution.</p>
+                    <p>Expert guidance on tech stacks, architecture decisions, performance optimization, and strategic project execution.</p>
                 </div>
             </div>
         </section>
 
+        <!-- PROJECTS -->
         <section id="projects">
-            <div class="section-header">
-                <h2>Featured Projects</h2>
-                <div class="line"></div>
+            <div class="section-head reveal">
+                <div class="section-label">Selected work</div>
+                <h2 class="section-title">Featured Projects</h2>
+                <p class="section-sub">A curated selection of the work we're most proud of.</p>
             </div>
-            <div class="grid-3">
-                <div class="glass-card">
-                    <img src="Untitled (22).png" alt="oneworld" class="project-img">
-                    <h3 class="project-title">Flow by tarmacq</h3>
-                    <p class="project-desc">Send files without limits<br> Direct browser-to-browser encrypted transfers. No cloud, no storage limits, no privacy concerns.</p>
-                    <a href="https://flow.tarmacq.com" class="btn-link">View Project <i class="fa-solid fa-arrow-right"></i></a>
+
+            <div class="projects-grid">
+                <div class="glass project-card reveal">
+                   <div class="project-img-wrap">
+    <img src="https://www.tarmacq.com/Untitled%20(22).png" alt="Flow by tarmacq">
+</div>
+                    <div class="project-body">
+                        <div class="project-tag">File Transfer</div>
+                        <h3>Flow by tarmacq</h3>
+                        <p>Send files without limits. Direct browser-to-browser encrypted transfers — no cloud, no storage limits, no privacy concerns.</p>
+                        <a href="https://flow.tarmacq.com" class="project-link" target="_blank">View Project <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
                 </div>
 
-                <div class="glass-card">
-                    <img src="Untitled-1.png" alt="jsali" class="project-img">
-                    <h3 class="project-title">tarmacq news</h3>
-                    <p class="project-desc">Get the latest news from all around the world, from your best news channel.</p>
-                    <a href="https://news.tarmacq.com" class="btn-link">View Project <i class="fa-solid fa-arrow-right"></i></a>
+                <div class="glass project-card reveal">
+                        <div class="project-img-wrap">
+    <img src="https://ik.imagekit.io/hswtnwf8i/news.png" alt="tarmacq news">
+</div>
+                    <div class="project-body">
+                        <div class="project-tag">News Platform</div>
+                        <h3>tarmacq news</h3>
+                        <p>Get the latest news from around the world, curated from your most trusted and relevant channels in one place.</p>
+                        <a href="https://news.tarmacq.com" class="project-link" target="_blank">View Project <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
                 </div>
 
-                <div class="glass-card">
-                    <img src="Untitled (13).png" alt="studios" class="project-img">
-                    <h3 class="project-title">tarmacq auth</h3>
-                    <p class="project-desc">One account, millions of possibilities. Access all the tarmacq ecosystem with only one account.</p>
-                    <a href="https://auth.tarmacq.com" class="btn-link">View Project <i class="fa-solid fa-arrow-right"></i></a>
+                <div class="glass project-card reveal">
+                   <div class="project-img-wrap">
+    <img src="https://ik.imagekit.io/hswtnwf8i/auth.png" alt="tarmacq auth">
+</div>
+                    <div class="project-body">
+                        <div class="project-tag">Authentication</div>
+                        <h3>tarmacq auth</h3>
+                        <p>One account, millions of possibilities. Access the entire tarmacq ecosystem with a single unified identity.</p>
+                        <a href="https://auth.tarmacq.com" class="project-link" target="_blank">View Project <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- REVIEWS -->
         <section id="reviews">
-            <div class="section-header">
-                <h2>Client Reviews</h2>
-                <div class="line"></div>
+            <div class="section-head reveal">
+                <div class="section-label">Testimonials</div>
+                <h2 class="section-title">Client Reviews</h2>
+                <p class="section-sub">Words from the people we've had the pleasure of working with.</p>
             </div>
-            <div class="grid-3">
-                <div class="glass-card" style="display:flex; align-items:center; gap:15px;">
-                    <img src="https://ik.imagekit.io/hswtnwf8i/c9ec2ac42f8e0b4d302cfd7b174fb921.webp_size=1024?updatedAt=1758375404749" style="width:50px; height:50px; border-radius:50%;" alt="Gamer1320">
-                    <div>
-                        <p style="font-style:italic; font-size:0.9rem;">"tarmacq has always been amazing at coding..."</p>
-                        <h4 style="margin-top:5px; color:var(--accent-primary);">Gamer1320</h4>
+
+            <div class="reviews-grid">
+                <div class="glass review-card reveal">
+                    <div class="review-stars">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="review-text">"tarmacq has always been amazing at coding. Every project is delivered with care and precision — highly recommended."</p>
+                    <div class="review-author">
+                        <img src="https://ik.imagekit.io/hswtnwf8i/c9ec2ac42f8e0b4d302cfd7b174fb921.webp_size=1024?updatedAt=1758375404749" alt="Gamer1320">
+                        <div>
+                            <div class="review-author-name">Gamer1320</div>
+                            <div class="review-author-role">Qatar VA</div>
+                        </div>
                     </div>
                 </div>
-                <div class="glass-card" style="display:flex; align-items:center; gap:15px;">
-                    <img src="https://ik.imagekit.io/hswtnwf8i/ronnieliang-pilot.png_ex=68cfffad&is=68ceae2d&hm=8e201ec1ef5872f4dbf8b6eb7cfa60b1da5698cb55d9c182f59b6bc4be15f8b9&?updatedAt=1758375514676" style="width:50px; height:50px; border-radius:50%;" alt="Ilhan">
-                    <div>
-                        <p style="font-style:italic; font-size:0.9rem;">"tarmacq is honestly one of the best devs I know..."</p>
-                        <h4 style="margin-top:5px; color:var(--accent-primary);">Ilhan</h4>
+
+                <div class="glass review-card reveal">
+                    <div class="review-stars">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="review-text">"tarmacq is honestly one of the best developers I know. The quality of their work and attention to detail is unmatched."</p>
+                    <div class="review-author">
+                        <img src="https://ik.imagekit.io/hswtnwf8i/ronnieliang-pilot.png_ex=68cfffad&is=68ceae2d&hm=8e201ec1ef5872f4dbf8b6eb7cfa60b1da5698cb55d9c182f59b6bc4be15f8b9&?updatedAt=1758375514676" alt="Ilhan">
+                        <div>
+                            <div class="review-author-name">Ilhan</div>
+                            <div class="review-author-role">Air Europa</div>
+                        </div>
                     </div>
                 </div>
-                <div class="glass-card" style="display:flex; align-items:center; gap:15px;">
-                    <img src="https://ik.imagekit.io/hswtnwf8i/8250fecdc62c4e42a693196f2179f18f.webp_size=1024?updatedAt=1758378502069" style="width:50px; height:50px; border-radius:50%;" alt="camping_n">
-                    <div>
-                        <p style="font-style:italic; font-size:0.9rem;">"tarmacq is a very active and passionate dev..."</p>
-                        <h4 style="margin-top:5px; color:var(--accent-primary);">camping_n</h4>
+
+                <div class="glass review-card reveal">
+                    <div class="review-stars">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="review-text">"tarmacq is a very active and passionate developer — always going the extra mile to make sure everything is perfect."</p>
+                    <div class="review-author">
+                        <img src="https://ik.imagekit.io/hswtnwf8i/8250fecdc62c4e42a693196f2179f18f.webp_size=1024?updatedAt=1758378502069" alt="camping_n">
+                        <div>
+                            <div class="review-author-name">camping_n</div>
+                            <div class="review-author-role">Iberia VA</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-
-        <footer>
-            <p>&copy; 2026 tarmacq. All Rights Reserved. | <a href="https://www.tarmacq.com/pp" style="color:inherit;">Privacy Policy</a> | <a href="https://www.tarmacq.com/terms" style="color:inherit;">Terms of use</a></p>
-        </footer>
-
     </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="wrap">
+            <div class="footer-inner">
+                <div class="footer-brand">
+    <img src="https://www.tarmacq.com/Untitled%20(12).png" alt="tarmacq" 
+         style="height: 150px; width: auto; border-radius: 50%; vertical-align: middle; margin-right: 8px;">
+</div>
+                <div class="footer-links">
+                    <a href="https://www.tarmacq.com/pp">Privacy Policy</a>
+                    <a href="https://www.tarmacq.com/terms">Terms of Use</a>
+                    <a href="https://instagram.com/tarmacq" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://discord.com/users/1129726655569600602" target="_blank"><i class="fa-brands fa-discord"></i></a>
+                </div>
+                <div class="footer-copy">&copy; 2026 tarmacq agency | وكــــــالة تارماك. All rights reserved.</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll reveal
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach((e, i) => {
+                if (e.isIntersecting) {
+                    const siblings = [...e.target.parentElement.querySelectorAll('.reveal')];
+                    const idx = siblings.indexOf(e.target);
+                    setTimeout(() => {
+                        e.target.classList.add('visible');
+                    }, idx * 80);
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        reveals.forEach(el => observer.observe(el));
+
+        // Nav scroll effect
+        const navWrap = document.querySelector('.nav-wrap');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 30) {
+                navWrap.style.padding = '0.6rem 0';
+            } else {
+                navWrap.style.padding = '1rem 0';
+            }
+        });
+    </script>
 </body>
 </html>
